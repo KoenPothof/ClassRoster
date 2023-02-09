@@ -43,4 +43,9 @@ public class Lesson {
     public void printTeacher(Teacher teacher) {
         System.out.println(teacher.toString());
     }
+
+    @Override
+    public String toString() {
+        return  "Lesson 1: " + subject + ", "+teacher + ", " + classroom + ", " + group + ", " + startTime + ", " + endTime;
+    }
 }
