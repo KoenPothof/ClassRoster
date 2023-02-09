@@ -6,9 +6,4 @@ public class Group {
     public Group(String classCode) {
         this.classCode = classCode;
     }
-
-    @Override
-    public String toString() {
-        return classCode;
-    }
 }
