@@ -10,14 +10,7 @@ import java.io.ObjectOutputStream;
 public class Test {
     public static void main(String[] args) {
 
-        Schedule schedule = new Schedule();
-        try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("Data.txt"))){
-            output.writeObject(schedule);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       Teacher teacher = new Teacher("Johan Talboom");
 
     }
 
