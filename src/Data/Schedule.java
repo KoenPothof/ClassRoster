@@ -7,9 +7,17 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Schedule implements Serializable {
+    private Subject subject;
+    private Teacher teacher;
+    private Classroom classroom;
+    private Group group;
+    private Lesson lesson;
 
-    public Schedule() {
+    public Schedule(Subject subject, Teacher teacher, Classroom classroom, Group group, Lesson lesson) {
+        this.subject = subject;
+        this.teacher = teacher;
+        this.classroom = classroom;
+        this.group = group;
+        this.lesson = lesson;
     }
-
-
 }
