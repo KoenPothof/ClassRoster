@@ -4,14 +4,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.math.RoundingMode;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) {
+        Schedule schedule = new Schedule();
+        schedule.saveLessons("lesson.dat");
 
-       Lesson lesson1 = new Lesson(Subject.math, new Teacher("Johan Shortstruik"), new Classroom(102),new Group("A1"), LocalTime.of(8,30),LocalTime.of(9,20));
 
-        System.out.println(lesson1.toString());
 
     }
 

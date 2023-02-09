@@ -1,5 +1,7 @@
 package Data;
 
+import java.util.ArrayList;
+
 public class Teacher {
     private String name;
 
@@ -7,11 +9,6 @@ public class Teacher {
         this.name = name;
     }
 
-    public Teacher createTeacher(String name){
-        Teacher teacher = new Teacher(name);
-
-        return teacher;
-    }
 
     @Override
     public String toString() {

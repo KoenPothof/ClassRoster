@@ -1,9 +1,10 @@
 package Data;
 
+import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Lesson {
+public class Lesson implements Serializable {
     private Subject subject;
     private Teacher teacher;
     private Classroom classroom;
@@ -15,17 +16,9 @@ public class Lesson {
     private ArrayList<Classroom> classrooms = new ArrayList<>();
     private ArrayList<Group> groups = new ArrayList<>();
 
-    public Lesson(Subject subject, Teacher teacher, Classroom classroom, Group group, LocalTime startTime, LocalTime endTime) {
-        this.subject = subject;
-        this.teacher = teacher;
-        this.classroom = classroom;
-        this.group = group;
+    public Lesson(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
-
-        this.teachers.add(this.teacher);
-        this.classrooms.add(this.classroom);
-        this.groups.add(this.group);
     }
 
     public void printTeachers(){
@@ -46,6 +39,6 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return  "Lesson 1: " + subject + ", "+teacher + ", " + classroom + ", " + group + ", " + startTime + ", " + endTime;
+        return "Lesson: " + startTime + ", " + endTime;
     }
 }
