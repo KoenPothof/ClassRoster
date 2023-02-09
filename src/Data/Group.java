@@ -1,9 +1,9 @@
 package Data;
 
-public class Class {
+public class Group {
     private String classCode;
 
-    public Class(String classCode) {
+    public Group(String classCode) {
         this.classCode = classCode;
     }
 }
