@@ -1,6 +1,6 @@
 package Data;
 
-public class Main {
+public class Schedule {
 
     public static void main(String[] args) {
 	// write your code here
