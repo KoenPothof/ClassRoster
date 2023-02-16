@@ -9,16 +9,15 @@ public class Lesson implements Serializable {
     private Teacher teacher;
     private Classroom classroom;
     private Group group;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
-    public Lesson(Data.Subject subject, Teacher teacher, Classroom classroom, Group group) {
+    public Lesson(Subject subject, Teacher teacher, Classroom classroom, Group group, LocalTime startTime, LocalTime endTime) {
         this.subject = subject;
         this.teacher = teacher;
         this.classroom = classroom;
         this.group = group;
-    }
-
-    @Override
-    public String toString() {
-        return this.subject.toString() + this.group + this.teacher + this.classroom;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 }
