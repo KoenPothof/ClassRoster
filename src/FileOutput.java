@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class FileOutput {
 
-    public void save(String filename, ArrayList<String> data){  // methode om naar file 
+    public void save(String filename, ArrayList<String> data){  // methode om naar file
         try(PrintWriter pw = new PrintWriter(filename)) {
             for (String s: data) {
                 System.out.printf("Saved: " + s); // debug code
