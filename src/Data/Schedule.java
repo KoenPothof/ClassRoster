@@ -16,10 +16,6 @@ public class Schedule implements Serializable {
     public Schedule() {
     }
 
-    public ArrayList<ArrayList> getlessons() {
-        this.lessons.add(getClassrooms());
-    }
-
     public ArrayList<Classroom> getClassrooms() {
         int room = 100;
         for (int i = 0; i < 7; i++) {
@@ -55,11 +51,13 @@ public class Schedule implements Serializable {
     public ArrayList<Teacher> getTeachers() {
         this.teachers.add(new Teacher("Johan Shortboom"));
         this.teachers.add(new Teacher("Joly Plusdijk"));
-        this.teachers.add(new Teacher("Hans"));
-        this.teachers.add(new Teacher("Joly Plusdijk"));
-        this.teachers.add(new Teacher("Joly Plusdijk"));
-        this.teachers.add(new Teacher("Joly Plusdijk"));
-        this.teachers.add(new Teacher("Joly Plusdijk"));
+        this.teachers.add(new Teacher("Hans van der Lindeboom"));
+        this.teachers.add(new Teacher("Peter Herreiger"));
+        this.teachers.add(new Teacher("Robin Schaaldier"));
+        this.teachers.add(new Teacher("Pieter Schop Jansen"));
+        this.teachers.add(new Teacher("Maurice Draden"));
+        this.teachers.add(new Teacher("Wouter van Ooievaar"));
+        this.teachers.add(new Teacher("Sanne Slopsepa"));
 
         return teachers;
     }
