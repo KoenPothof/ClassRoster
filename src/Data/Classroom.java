@@ -7,4 +7,3 @@ public class Classroom {
         this.classRoom = classRoom;
     }
 }
-//aangepast
