@@ -1,6 +1,6 @@
 package Data;
 
 public enum Subject {
-    math, geography, English
+    Wiskunde, Nederlands, Engels, Economie, Frans, Duits, Muziek, Scheikunde, Natuurkunde
 }
 

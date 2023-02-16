@@ -11,6 +11,9 @@ import java.util.Scanner;
 
 public class Test {
     public static void main(String[] args) {
+        Schedule schedule = new Schedule();
+        OutputFile output = new OutputFile();
+        output.save("data.txt", schedule.getlessons());
     }
 
 }

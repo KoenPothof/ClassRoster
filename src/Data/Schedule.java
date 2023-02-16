@@ -7,17 +7,60 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 public class Schedule implements Serializable {
-    private Subject subject;
-    private Teacher teacher;
-    private Classroom classroom;
-    private Group group;
-    private Lesson lesson;
+    private ArrayList<Group> groups;
+    private ArrayList<Classroom> classrooms;
+    private ArrayList<Subject> subjects;
+    private ArrayList<Teacher> teachers;
+    private ArrayList<Lesson> lessons;
 
-    public Schedule(Subject subject, Teacher teacher, Classroom classroom, Group group, Lesson lesson) {
-        this.subject = subject;
-        this.teacher = teacher;
-        this.classroom = classroom;
-        this.group = group;
-        this.lesson = lesson;
+    public Schedule() {
+    }
+
+    public ArrayList<ArrayList> getlessons() {
+        this.lessons.add(getClassrooms());
+    }
+
+    public ArrayList<Classroom> getClassrooms() {
+        int room = 100;
+        for (int i = 0; i < 7; i++) {
+            this.classrooms.add(new Classroom(Integer.toString(room)));
+            room++;
+        }
+        return this.classrooms;
+    }
+
+    public ArrayList<Group> getGroups() {
+        int group = 0;
+        for (int i = 0; i < 5; i++) {
+            this.groups.add(new Group("A" + group));
+        }
+        return groups;
+    }
+
+    public ArrayList<Subject> getSubjects() {
+
+        this.subjects.add((Subject.Wiskunde));
+        this.subjects.add((Subject.Nederlands));
+        this.subjects.add((Subject.Engels));
+        this.subjects.add((Subject.Duits));
+        this.subjects.add((Subject.Frans));
+        this.subjects.add((Subject.Economie));
+        this.subjects.add((Subject.Natuurkunde));
+        this.subjects.add((Subject.Scheikunde));
+        this.subjects.add((Subject.Muziek));
+
+        return subjects;
+    }
+
+    public ArrayList<Teacher> getTeachers() {
+        this.teachers.add(new Teacher("Johan Shortboom"));
+        this.teachers.add(new Teacher("Joly Plusdijk"));
+        this.teachers.add(new Teacher("Hans"));
+        this.teachers.add(new Teacher("Joly Plusdijk"));
+        this.teachers.add(new Teacher("Joly Plusdijk"));
+        this.teachers.add(new Teacher("Joly Plusdijk"));
+        this.teachers.add(new Teacher("Joly Plusdijk"));
+
+        return teachers;
     }
 }
