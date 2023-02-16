@@ -187,4 +187,8 @@ public class GUIrooster extends Application {
             labels.set(labelIndex, newlabel);
         }
     }
+
+    public ArrayList LabelList(){
+        return labels;
+    }
 }
