@@ -1,9 +1,9 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-public class FileOutput {
+public class FileConverter {
 
     public void save(String filename, List<String> data, List<String> data2){  // methode om naar file
         try(PrintWriter pw = new PrintWriter(filename)) {
@@ -19,5 +19,19 @@ public class FileOutput {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<String> load(String filename, List<String> list){
+
+        try (Scanner input = new Scanner(filename)){
+            if (input.hasNext()){
+                String data = input.nextLine();
+                list.add(data);
+                System.out.println("Loaded: " + data);;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return list;
     }
 }
