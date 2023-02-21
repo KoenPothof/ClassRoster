@@ -1,10 +1,11 @@
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FileOutput {
 
-    public void save(String filename, ArrayList<String> data, ArrayList<String> data2){  // methode om naar file
+    public void save(String filename, List<String> data, ArrayList<String> data2){  // methode om naar file
         try(PrintWriter pw = new PrintWriter(filename)) {
             for (int i = 0; i < data.size(); i++) {
 //                System.out.println("Saved: " + s); // debug code

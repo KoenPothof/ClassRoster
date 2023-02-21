@@ -1,9 +1,10 @@
 package Data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Classroom {
-    private final ArrayList<String> classRooms;
+    private final List<String> classRooms;
 
     public Classroom() {
         classRooms = new ArrayList<>();
@@ -13,7 +14,7 @@ public class Classroom {
         this.classRooms.add(classRoom);
     }
 
-    public ArrayList<String> get() {
+    public List<String> get() {
         return classRooms;
     }
 

@@ -1,9 +1,11 @@
 package Data;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Group {
-    private final ArrayList<String> groups;
+    private final List<String> groups;
 
     public Group() {
         groups = new ArrayList<>();
@@ -13,7 +15,7 @@ public class Group {
         this.groups.add(group);
     }
 
-    public ArrayList<String> get() {
+    public List<String> get() {
         return groups;
     }
 
