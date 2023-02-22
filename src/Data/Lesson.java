@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class Lesson implements Serializable {
+public class Lesson {
     private Subject subject;
     private Teacher teacher;
     private Classroom classroom;

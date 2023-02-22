@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 
-public class Schedule implements Serializable {
+public class Schedule {
     private Subject subject;
     private Teacher teacher;
     private Classroom classroom;

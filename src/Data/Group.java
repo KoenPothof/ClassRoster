@@ -1,9 +1,30 @@
 package Data;
 
-public class Group {
-    private String classCode;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Group(String classCode) {
-        this.classCode = classCode;
+public class Group {
+    private final List<String> groups;
+
+    public Group() {
+        groups = new ArrayList<>();
+    }
+
+    public void add(String group) {
+        this.groups.add(group);
+    }
+
+    public List<String> get() {
+        return groups;
+    }
+
+    @Override
+    public String toString() {
+        String returnString = "";
+        for (String group : groups) {
+            returnString = returnString + group + " ";
+        }
+        return returnString;
     }
 }
