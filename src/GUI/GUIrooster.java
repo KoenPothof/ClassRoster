@@ -12,6 +12,8 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class GUIrooster extends Application {
+    public Scene scene2;
+    public GUIboxrooster guIboxrooster;
     public Label time = new Label("8.30-9.20");
     public Label subject = new Label("");
     public Label teacher = new Label("");
@@ -61,17 +63,16 @@ public class GUIrooster extends Application {
     @Override
     public void start(Stage stage) {
         stage.setTitle("Hello world!");
-        VBox vBox = new VBox();
-        Label label1 = new Label("Roosterview");
-        Button addButton = new Button("ADD");
+        VBox vBoxrooster = new VBox();
+        Label labelrooster = new Label("Roosterview");
         Button editButton = new Button("EDIT");
 
         editButton.setOnAction(e -> {
 
         });
 
-        HBox hBox = new HBox();
-        hBox.getChildren().addAll(label1, addButton, editButton);
+        HBox hBoxrooster = new HBox();
+        hBoxrooster.getChildren().addAll(labelrooster, editButton);
         GridPane lessons = new GridPane();
 
         Label timeHead = new Label("Time");
@@ -90,9 +91,9 @@ public class GUIrooster extends Application {
         ) {
             label.setBackground(new Background(new BackgroundFill(Color.GRAY, CornerRadii.EMPTY, Insets.EMPTY)));
         }
-        HBox hBox1 = new HBox();
-        hBox1.getChildren().addAll(timeHead, subjectHead, teacherHead, locationHead, groupHead);
-        hBox1.setSpacing(30);
+        HBox hBox1rooster = new HBox();
+        hBox1rooster.getChildren().addAll(timeHead, subjectHead, teacherHead, locationHead, groupHead);
+        hBox1rooster.setSpacing(30);
 
 
         labels.add(time);
@@ -171,24 +172,13 @@ public class GUIrooster extends Application {
         }
 
         lessons.setHgap(50);
-        vBox.getChildren().addAll(hBox, hBox1, lessons);
-        Scene scene = new Scene(vBox);
-        stage.setScene(scene);
+        vBoxrooster.getChildren().addAll(hBoxrooster, hBox1rooster, lessons);
+        scene2 = new Scene(vBoxrooster);
+        stage.setScene(scene2);
         stage.show();
     }
 
     public static void main(String[] args) {
         launch(GUIrooster.class);
-    }
-
-    public void newLabel(Label oldLabel, Label newlabel){
-        if(labels.contains(oldLabel)){
-            int labelIndex =  labels.indexOf(oldLabel);
-            labels.set(labelIndex, newlabel);
-        }
-    }
-
-    public ArrayList LabelList(){
-        return labels;
     }
 }
