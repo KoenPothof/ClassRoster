@@ -3,9 +3,26 @@ package Data;
 import java.util.ArrayList;
 
 public class Teacher {
-    private String name;
+    private final ArrayList<String> teachers;
 
-    public Teacher(String name) {
-        this.name = name;
+    public Teacher() {
+        teachers = new ArrayList<>();
+    }
+
+    public void add(String teacher) {
+        this.teachers.add(teacher);
+    }
+
+    public ArrayList<String> get() {
+        return teachers;
+    }
+
+    @Override
+    public String toString() {
+        String returnString = "";
+        for (String teacher : teachers) {
+            returnString = returnString + teacher + " ";
+        }
+        return returnString;
     }
 }
