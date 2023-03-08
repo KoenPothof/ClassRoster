@@ -7,31 +7,37 @@ import java.util.Scanner;
 
 public class FileConverter {
 
-    public void save(String filename, List<String> data, List<String> data2){  // methode om naar file
-        try(PrintWriter pw = new PrintWriter(filename)) {
+    private String filename;
+
+    public FileConverter(String filename) {
+        this.filename = filename;
+    }
+
+    public void save(ArrayList<String[]> data){  // methode om naar file
+        try(PrintWriter pw = new PrintWriter(this.filename)) {
             for (int i = 0; i < data.size(); i++) {
-//                System.out.println("Saved: " + s); // debug code
-                pw.print(data.get(i)+" ");
-            }
-            pw.println();
-            for (int i = 0; i < data2.size(); i++) {
-//                System.out.println("Saved: " + s); // debug code
-                pw.print(data2.get(i)+" ");
+                for (int j = 0; j < data.get(i).length; j++) {
+                    pw.print(data.get(i)[j]+"@");
+//                    System.out.println("Saved: " + data.get(i)[j]); // debug code
+                }
+                if (i != data.size()-1) {
+                    pw.println();
+                }
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<String> load(String filename){
-        List<String> list = new ArrayList<>();
-        File file = new File(filename);
+    public ArrayList<String[]> load(){
+        ArrayList<String[]> list = new ArrayList<>();
+        File file = new File(this.filename);
 
         try (Scanner input = new Scanner(file)){
             while (input.hasNext()){
                 String data = input.nextLine();
-                System.out.println("Loaded: " + data);;
-                list.add(data);
+//                System.out.println("Loaded: " + data); // debug code
+                list.add(data.split("@", 0));
 
             }
         }catch (Exception e){
