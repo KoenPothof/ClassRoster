@@ -9,7 +9,6 @@ import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 
 import static javafx.application.Application.launch;
 
@@ -40,7 +39,7 @@ public class MapTest extends Application {
         draw(g2d);
     }
 
-    public void init() throws FileNotFoundException {
+    public void init() {
         map = new Map("SchoolBuilding1.json");
     }
 

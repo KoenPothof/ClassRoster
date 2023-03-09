@@ -1,12 +1,8 @@
 package map;
 
-import javax.imageio.ImageIO;
 import javax.json.*;
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class CodeTest {
@@ -17,10 +13,20 @@ public class CodeTest {
         reader = Json.createReader(new FileInputStream("SchoolBuilding1.json"));
         JsonObject root = reader.readObject();
 
+
         //data arrays uitlezen
         JsonArray layers = root.getJsonArray("layers");
         JsonArray chunksArray = null;
         JsonArray dataArray;
+
+
+
+
+        //mapwidth
+        int width = root.getInt("width");
+        //mapheight
+        int height = root.getInt("height");
+
 
         for (int i = 0; i < layers.size(); i++) {
             chunksArray = layers.getJsonObject(i).getJsonArray("chunks");
@@ -28,14 +34,10 @@ public class CodeTest {
 
         for (int i = 0; i < chunksArray.size(); i++) {
             dataArray = chunksArray.getJsonObject(i).getJsonArray("data");
-
+            System.out.println(dataArray);
             jsonArrays.add(dataArray);
         }
-
-        //mapwidth
-        int width = root.getInt("width");
-        //mapheight
-        int height = root.getInt("height");
+      
 
         //tilesets uitlezen
         JsonArray tilesets = root.getJsonArray("tilesets");

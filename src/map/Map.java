@@ -19,30 +19,42 @@ import java.util.ArrayList;
 public class Map {
     private int tileWidth;
     private int tileHeight;
-    private Tile tile;
     private int width;
     private int height;
-    private int[][] map;
 
     private ArrayList<BufferedImage> tiles = new ArrayList<>();
     private ArrayList<Integer> jsonArrays = new ArrayList<>();
-    private BufferedImage image;
+    private ArrayList<BufferedImage> tilesets = new ArrayList<>(3);
+    private JsonArray chunksArray;
+    private JsonArray dataArray;
+    private JsonArray layers;
+    int[][] map;
 
 
-    public Map(String filename) throws FileNotFoundException {
+    public Map(String fileName)  {
         JsonReader reader = null;
-        reader = Json.createReader(new FileInputStream(filename));
+        try {
+            reader = Json.createReader(new FileInputStream(fileName));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         JsonObject root = reader.readObject();
 
-        JsonArray tilesets = root.getJsonArray("tilesets");
+        this.width = root.getInt("width");
+        this.height = root.getInt("height");
 
         try {
+            BufferedImage tileset1 = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(1).getString("image")));
+//            BufferedImage tileset2 = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(2).getString("image")));
+//            BufferedImage tileset3 = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(3).getString("image")));
+            tilesets.add(tileset1);
+//            tilesets.add(tileset2);
+//            tilesets.add(tileset3);
+
             tileHeight = root.getInt("tileheight");
             tileWidth = root.getInt("tilewidth");
 
-            for (int i = 0; i < tilesets.size(); i++) {
-                image = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(i).getString("image")));
-
+            for (BufferedImage image:tilesets) {
                 for (int y = 0; y < image.getHeight(); y += tileHeight) {
                     for (int x = 0; x < image.getWidth(); x += tileWidth) {
                         tiles.add(image.getSubimage(x, y, tileWidth, tileHeight));
@@ -53,9 +65,7 @@ public class Map {
             e.printStackTrace();
         }
 
-        JsonArray layers = root.getJsonArray("layers");
-        JsonArray chunksArray = null;
-        JsonArray dataArray;
+        layers = root.getJsonArray("layers");
 
         for (int i = 0; i < layers.size(); i++) {
             chunksArray = layers.getJsonObject(i).getJsonArray("chunks");
