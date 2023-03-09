@@ -32,7 +32,6 @@ public class FileConverter {
                 String data = input.nextLine();
                 System.out.println("Loaded: " + data);;
                 list.add(data);
-
             }
         }catch (Exception e){
             e.printStackTrace();
