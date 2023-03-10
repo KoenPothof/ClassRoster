@@ -22,42 +22,46 @@ public class Map {
     private int width;
     private int height;
 
-    private ArrayList<BufferedImage> tiles = new ArrayList<>();
+
     private ArrayList<Integer> jsonArrays = new ArrayList<>();
     private ArrayList<BufferedImage> tilesets = new ArrayList<>(3);
+    private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
     private JsonArray chunksArray;
     private JsonArray dataArray;
     private JsonArray layers;
+    private Layer layer;
     int[][] map;
+    int[] tile;
+    private BufferedImage image;
 
+    Tile t;
 
-    public Map(String fileName)  {
+    public Map(String fileName) {
         JsonReader reader = null;
         try {
-            reader = Json.createReader(new FileInputStream(fileName));
+            reader = Json.createReader(new FileInputStream("resources/" + fileName));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
         JsonObject root = reader.readObject();
+        t = new Tile(fileName);
 
         this.width = root.getInt("width");
         this.height = root.getInt("height");
 
         try {
-            BufferedImage tileset1 = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(1).getString("image")));
-//            BufferedImage tileset2 = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(2).getString("image")));
-//            BufferedImage tileset3 = ImageIO.read(getClass().getResourceAsStream(root.getJsonArray("tilesets") .getJsonObject(3).getString("image")));
-            tilesets.add(tileset1);
-//            tilesets.add(tileset2);
-//            tilesets.add(tileset3);
+            for (int i = 1; i < 4; i++) {
+                image = ImageIO.read(new FileInputStream("resources/" + root.getJsonArray("tilesets").getJsonObject(i).getString("image")));
+                tilesets.add(image);
+            }
 
-            tileHeight = root.getInt("tileheight");
-            tileWidth = root.getInt("tilewidth");
+            tileHeight = t.getTileHeight();
+            tileWidth = t.getTileWidth();
 
             for (BufferedImage image:tilesets) {
                 for (int y = 0; y < image.getHeight(); y += tileHeight) {
                     for (int x = 0; x < image.getWidth(); x += tileWidth) {
-                        tiles.add(image.getSubimage(x, y, tileWidth, tileHeight));
+                        slicedTiles.add(image.getSubimage(x, y, tileWidth, tileHeight));
                     }
                 }
             }
@@ -67,20 +71,19 @@ public class Map {
 
         layers = root.getJsonArray("layers");
 
-        for (int i = 0; i < layers.size(); i++) {
-            chunksArray = layers.getJsonObject(i).getJsonArray("chunks");
-        }
+        chunksArray = layers.getJsonObject(0).getJsonArray("chunks");
 
         for (int i = 0; i < chunksArray.size(); i++) {
             dataArray = chunksArray.getJsonObject(i).getJsonArray("data");
-            jsonArrays.add(dataArray.getInt(i));
+            tile[i] = (dataArray.getInt(i));
         }
     }
 
-
     public void draw(FXGraphics2D g2d) {
-        for (int i = 0; i < jsonArrays.size(); i++) {
-            g2d.drawImage(tiles.get(jsonArrays.get(i)),AffineTransform.getTranslateInstance(i* tileWidth,i * tileHeight),null);
+        for (int i = 0; i < dataArray.size(); i++) {
+            g2d.drawImage(slicedTiles.get(tile[i]), AffineTransform.getTranslateInstance(i * tileWidth, i * tileHeight), null);
+
         }
+
     }
 }

@@ -1,43 +1,47 @@
 package map;
 
+import Data.Classroom;
+
+import javax.imageio.ImageIO;
 import javax.json.*;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CodeTest {
 
     public static void main(String[] args) throws FileNotFoundException {
-        ArrayList<JsonArray> jsonArrays = new ArrayList<>();
         JsonReader reader = null;
-        reader = Json.createReader(new FileInputStream("SchoolBuilding1.json"));
+        reader = Json.createReader(new FileInputStream("resources/SchoolBuilding1.json"));
         JsonObject root = reader.readObject();
-
+        Layer layer = new Layer("resources/SchoolBuilding1.json");
 
         //data arrays uitlezen
         JsonArray layers = root.getJsonArray("layers");
         JsonArray chunksArray = null;
-        JsonArray dataArray;
-
-
+        JsonArray tile;
 
 
         //mapwidth
-        int width = root.getInt("width");
+        int width = root.getJsonArray("layers").getJsonObject(0).getInt("width");
+//        System.out.println(width);
+
         //mapheight
-        int height = root.getInt("height");
+        int height = root.getJsonArray("layers").getJsonObject(0).getInt("height");
+//        System.out.println(height);
 
 
-        for (int i = 0; i < layers.size(); i++) {
-            chunksArray = layers.getJsonObject(i).getJsonArray("chunks");
+        chunksArray = layers.getJsonObject(0).getJsonArray("chunks");
+        tile = chunksArray.getJsonObject(0).getJsonArray("data");
+        int[] data = new int[tile.size()];
+        for (int i = 0; i < tile.size(); i++) {
+            data[i] = tile.getInt(i);
         }
-
-        for (int i = 0; i < chunksArray.size(); i++) {
-            dataArray = chunksArray.getJsonObject(i).getJsonArray("data");
-            System.out.println(dataArray);
-            jsonArrays.add(dataArray);
-        }
-      
+        System.out.println(Arrays.toString(data));
+//        System.out.println(tile);
 
         //tilesets uitlezen
         JsonArray tilesets = root.getJsonArray("tilesets");
@@ -46,12 +50,23 @@ public class CodeTest {
         }
 
 
-//        try {
-//            BufferedImage weirdTileset = ImageIO.read(CodeTest.class.getResourceAsStream(root.getJsonArray("tilesets").getString(2)));
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        ArrayList<BufferedImage> tiles = new ArrayList<>();
+        try {
+            BufferedImage tilemap = ImageIO.read(new FileInputStream("resources/" + root.getJsonArray("tilesets").getJsonObject(1).getString("image")));
 
+            int tileHeight = root.getInt("tileheight");
+            int tileWidth = root.getInt("tilewidth");
+
+            for(int y = 0; y < tilemap.getHeight(); y += tileHeight)
+            {
+                for(int x = 0; x < tilemap.getWidth(); x += tileWidth)
+                {
+                    tiles.add(tilemap.getSubimage(x, y, tileWidth, tileHeight));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }
