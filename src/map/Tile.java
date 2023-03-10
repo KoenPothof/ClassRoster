@@ -11,9 +11,7 @@ import java.util.ArrayList;
 public class Tile {
     private int tileWidth;
     private int tileHeight;
-    private int[] tiles;
-    private ArrayList<int[]> dataArrays = new ArrayList<>();
-    private JsonArray data;
+    private int[][] tiles;
 
     public int getTileWidth() {
         return tileWidth;
@@ -36,13 +34,14 @@ public class Tile {
         this.tileWidth = root.getInt("tilewidth");
     }
 
-    public ArrayList<int[]> saveTile(JsonArray layer,int index) {
-        data = layer.getJsonObject(index).getJsonArray("data");
-        tiles = new int[data.size()];
-        for (int x = 0; x < data.size(); x++) {
-            tiles[x] = data.getInt(dataArrays.size());
-            dataArrays.add(tiles);
+    public int[][] saveTile(JsonArray layer) {
+        tiles = new int[layer.size()][tileWidth*tileHeight];
+
+        for (int y = 0; y < layer.size(); y++) {
+            for (int x = 0; x < tileWidth*tileHeight; x++) {
+                tiles[y][x] = layer.getJsonObject(y).getJsonArray("data").getInt(x);
+            }
         }
-        return dataArrays;
+        return tiles;
     }
 }

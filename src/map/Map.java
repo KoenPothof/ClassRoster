@@ -19,22 +19,17 @@ import java.util.ArrayList;
 public class Map {
     private int tileWidth;
     private int tileHeight;
-    private int width;
-    private int height;
-
-
-    private ArrayList<Integer> jsonArrays = new ArrayList<>();
+    private int mapWidth;
+    private int mapHeight;
     private ArrayList<BufferedImage> tilesets = new ArrayList<>(3);
     private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
-    private JsonArray chunksArray;
-    private JsonArray dataArray;
-    private JsonArray layers;
     private Layer layer;
-    int[][] map;
-    int[] tile;
+    private  int[][] map;
     private BufferedImage image;
+    private Tile t;
+    int[] data;
+    JsonArray chunksArray;
 
-    Tile t;
 
     public Map(String fileName) {
         JsonReader reader = null;
@@ -44,16 +39,21 @@ public class Map {
             throw new RuntimeException(e);
         }
         JsonObject root = reader.readObject();
+        layer = new Layer(fileName);
         t = new Tile(fileName);
 
-        this.width = root.getInt("width");
-        this.height = root.getInt("height");
+        mapWidth = root.getJsonArray("layers").getJsonObject(0).getInt("width");
+        mapHeight = root.getJsonArray("layers").getJsonObject(0).getInt("height");
 
         try {
-            for (int i = 1; i < 4; i++) {
-                image = ImageIO.read(new FileInputStream("resources/" + root.getJsonArray("tilesets").getJsonObject(i).getString("image")));
-                tilesets.add(image);
-            }
+            tilesets.add(ImageIO.read(new FileInputStream("resources/dark-wood.png")));
+            tilesets.add(ImageIO.read(new FileInputStream("resources/Game Boy Advance - Pokemon Emerald - Interior Tilesets.png")));
+            tilesets.add(ImageIO.read(new FileInputStream("resources/New Piskel.png")));
+            tilesets.add(ImageIO.read(new FileInputStream("resources/74257b9030d47b8adc5eacd20f23050b.png")));
+            tilesets.add(ImageIO.read(new FileInputStream("resources/ddpy71z-41398be7-7d93-453f-a8b6-dd7312fcabeb.png")));
+            tilesets.add(ImageIO.read(new FileInputStream("resources/PC Computer - Stardew Valley - Town Interior.png")));
+            tilesets.add(ImageIO.read(new FileInputStream("resources/Slates v.2 [32x32px orthogonal tileset by Ivan Voirol].png")));
+
 
             tileHeight = t.getTileHeight();
             tileWidth = t.getTileWidth();
@@ -69,22 +69,42 @@ public class Map {
             e.printStackTrace();
         }
 
-        layers = root.getJsonArray("layers");
+        map = this.layer.getLayer();
 
-        chunksArray = layers.getJsonObject(0).getJsonArray("chunks");
-
-
-        for (int i = 0; i < chunksArray.size(); i++) {
-            dataArray = chunksArray.getJsonObject(i).getJsonArray("data");
-            tile[i] = (dataArray.getInt(i));
+        JsonArray layers = root.getJsonArray("layers");
+        chunksArray = layers.getJsonObject(1).getJsonArray("chunks");
+        JsonArray tile = chunksArray.getJsonObject(1).getJsonArray("data");
+        data = new int[tile.size()];
+        for (int i = 0; i < tile.size(); i++) {
+            data[i] = tile.getInt(i);
         }
     }
 
     public void draw(FXGraphics2D g2d) {
-        for (int i = 0; i < dataArray.size(); i++) {
-            g2d.drawImage(slicedTiles.get(tile[i]), AffineTransform.getTranslateInstance(i * tileWidth, i * tileHeight), null);
-
+        AffineTransform tx = new AffineTransform();
+        tx.scale(2,2);
+//        layer.draw(g2d);
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] < 0){
+                continue;
+            }
+            g2d.drawImage(slicedTiles.get(data[i]),tx,null);
         }
+
+
+//        for(int y = 0; y < mapHeight; y++)
+//        {
+//            for(int x = 0; x < mapWidth; x++)
+//            {
+//                if(map[y][x] < 0 || map[y][x] > 10000)
+//                    continue;
+//
+//                g2d.drawImage(
+//                        slicedTiles.get(map[y][x]),
+//                        AffineTransform.getTranslateInstance(x*tileWidth, y*tileHeight),
+//                        null);
+//            }
+//        }
 
     }
 }

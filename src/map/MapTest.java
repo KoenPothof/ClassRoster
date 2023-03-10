@@ -40,14 +40,14 @@ public class MapTest extends Application {
     }
 
     public void init() {
-        map = new Map("SchoolBuilding1.json");
+        map = new Map("project.json");
     }
 
 
 
     public void draw(FXGraphics2D g)
     {
-        g.setBackground(Color.black);
+        g.setBackground(Color.white);
         g.clearRect(0,0,(int)canvas.getWidth(), (int)canvas.getHeight());
         map.draw(g);
     }

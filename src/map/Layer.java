@@ -2,18 +2,26 @@ package map;
 
 import org.jfree.fx.FXGraphics2D;
 
+import javax.imageio.ImageIO;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Layer {
     private Tile t;
-    ArrayList<int[]> layer;
+    private int[][] layer;
     private int [] data;
+    private BufferedImage image;
+    private ArrayList<BufferedImage> tilesets = new ArrayList<>();
+    private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
 
     public Layer(String fileName) {
         JsonReader reader = null;
@@ -25,31 +33,14 @@ public class Layer {
         JsonObject root = reader.readObject();
 
         t = new Tile(fileName);
-        int tileWidth = t.getTileWidth();
-        int tileHeight = t.getTileHeight();
-        int mapWidth = root.getJsonArray("layers").getJsonObject(0).getInt("width");
-        int mapHeight = root.getJsonArray("layers").getJsonObject(0).getInt("height");
 
         JsonArray backgroundLayer = root.getJsonArray("layers").getJsonObject(0).getJsonArray("chunks");
         JsonArray itemLayer = root.getJsonArray("layers").getJsonObject(1).getJsonArray("chunks");
 
-        this.layer = t.saveTile(backgroundLayer, 0);
+        this.layer = t.saveTile(itemLayer);
 
-        JsonArray dataArray = backgroundLayer.getJsonObject(0).getJsonArray("data");
-        data = new int[dataArray.size()];
-        for (int i = 0; i < dataArray.size(); i++) {
-            data[i] = dataArray.getInt(i);
-        }
-//
-//        tile = new int[mapHeight][mapWidth];
-//
-//        for (int y = 0; y < 27; y++) {
-//            for (int x = 0; x < mapHeight; x++) {
-//                tile[y][x] = backgroundLayer.getJsonObject(y).getJsonArray("data").getInt(x);
-//            }
-//        }
     }
-    public ArrayList<int[]> getLayer() {
+    public int[][] getLayer() {
         return layer;
     }
     public int[] getData() {
@@ -57,6 +48,18 @@ public class Layer {
     }
 
     public void draw(FXGraphics2D g2d) {
-
+//        for(int y = 0; y < 64; y++)
+//        {
+//            for(int x = 0; x < 112; x++)
+//            {
+//                if(layer[y][x] < 0)
+//                    continue;
+//
+//                g2d.drawImage(
+//                        slicedTiles.get(layer[y][x]),
+//                        AffineTransform.getTranslateInstance(x*112, y*64),
+//                        null);
+//            }
+//        }
     }
 }

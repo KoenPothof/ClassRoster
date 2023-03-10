@@ -50,7 +50,7 @@ public class CodeTest {
         }
 //        System.out.println(Arrays.toString(test));
 //        System.out.println(tile);
-        System.out.println(Arrays.toString(t.saveTile(chunksArray,0).get(0)));
+        System.out.println(Arrays.stream(layer.getLayer()).toArray());
         //tilesets uitlezen
         JsonArray tilesets = root.getJsonArray("tilesets");
         for (int i = 1; i < 4; i++) {
