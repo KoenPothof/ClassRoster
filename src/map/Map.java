@@ -82,29 +82,29 @@ public class Map {
 
     public void draw(FXGraphics2D g2d) {
         AffineTransform tx = new AffineTransform();
-        tx.scale(2,2);
+//        tx.scale(2,2);
 //        layer.draw(g2d);
-        for (int i = 0; i < data.length; i++) {
-            if (data[i] < 0){
-                continue;
-            }
-            g2d.drawImage(slicedTiles.get(data[i]),tx,null);
-        }
-
-
-//        for(int y = 0; y < mapHeight; y++)
-//        {
-//            for(int x = 0; x < mapWidth; x++)
-//            {
-//                if(map[y][x] < 0 || map[y][x] > 10000)
-//                    continue;
-//
-//                g2d.drawImage(
-//                        slicedTiles.get(map[y][x]),
-//                        AffineTransform.getTranslateInstance(x*tileWidth, y*tileHeight),
-//                        null);
+//        for (int i = 0; i < data.length; i++) {
+//            if (data[i] < 0){
+//                continue;
 //            }
+//            g2d.drawImage(slicedTiles.get(data[i]),tx,null);
 //        }
+
+
+        for(int y = 0; y < 24; y++)
+        {
+            for(int x = 0; x < 256; x++)
+            {
+                if(map[y][x] < 0)
+                    continue;
+
+                g2d.drawImage(
+                        slicedTiles.get(map[y][x]),
+                        AffineTransform.getTranslateInstance(x*tileWidth, y*tileHeight),
+                        null);
+            }
+        }
 
     }
 }
