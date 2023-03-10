@@ -73,6 +73,7 @@ public class Map {
 
         chunksArray = layers.getJsonObject(0).getJsonArray("chunks");
 
+
         for (int i = 0; i < chunksArray.size(); i++) {
             dataArray = chunksArray.getJsonObject(i).getJsonArray("data");
             tile[i] = (dataArray.getInt(i));

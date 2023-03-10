@@ -17,7 +17,8 @@ public class CodeTest {
         JsonReader reader = null;
         reader = Json.createReader(new FileInputStream("resources/SchoolBuilding1.json"));
         JsonObject root = reader.readObject();
-        Layer layer = new Layer("resources/SchoolBuilding1.json");
+        Layer layer = new Layer("SchoolBuilding1.json");
+        Tile t = new Tile("SchoolBuilding1.json");
 
         //data arrays uitlezen
         JsonArray layers = root.getJsonArray("layers");
@@ -33,21 +34,30 @@ public class CodeTest {
         int height = root.getJsonArray("layers").getJsonObject(0).getInt("height");
 //        System.out.println(height);
 
-
+        int[][] test = new int[height][width];
         chunksArray = layers.getJsonObject(0).getJsonArray("chunks");
         tile = chunksArray.getJsonObject(0).getJsonArray("data");
         int[] data = new int[tile.size()];
+
+
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 7; x++) {
+                test[y][x] = chunksArray.getJsonObject(y).getJsonArray("data").getInt(x);
+            }
+        }
         for (int i = 0; i < tile.size(); i++) {
             data[i] = tile.getInt(i);
         }
-        System.out.println(Arrays.toString(data));
+//        System.out.println(Arrays.toString(test));
 //        System.out.println(tile);
-
+        System.out.println(Arrays.toString(t.saveTile(chunksArray,0).get(0)));
         //tilesets uitlezen
         JsonArray tilesets = root.getJsonArray("tilesets");
         for (int i = 1; i < 4; i++) {
-            System.out.println(tilesets.getJsonObject(i).getString("image"));
+//            System.out.println(tilesets.getJsonObject(i).getString("image"));
         }
+
+//        System.out.println(Arrays.toString(layer.getLayer().get(1)));
 
 
         ArrayList<BufferedImage> tiles = new ArrayList<>();

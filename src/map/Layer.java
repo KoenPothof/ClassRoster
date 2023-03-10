@@ -8,16 +8,12 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Layer {
-    Tile t;
-
-    public int[] getData() {
-        return data;
-    }
-
-    int[][] tile;
-    int [] data;
+    private Tile t;
+    ArrayList<int[]> layer;
+    private int [] data;
 
     public Layer(String fileName) {
         JsonReader reader = null;
@@ -35,10 +31,11 @@ public class Layer {
         int mapHeight = root.getJsonArray("layers").getJsonObject(0).getInt("height");
 
         JsonArray backgroundLayer = root.getJsonArray("layers").getJsonObject(0).getJsonArray("chunks");
-        JsonArray dataArray = backgroundLayer.getJsonObject(0).getJsonArray("data");
         JsonArray itemLayer = root.getJsonArray("layers").getJsonObject(1).getJsonArray("chunks");
 
+        this.layer = t.saveTile(backgroundLayer, 0);
 
+        JsonArray dataArray = backgroundLayer.getJsonObject(0).getJsonArray("data");
         data = new int[dataArray.size()];
         for (int i = 0; i < dataArray.size(); i++) {
             data[i] = dataArray.getInt(i);
@@ -51,6 +48,12 @@ public class Layer {
 //                tile[y][x] = backgroundLayer.getJsonObject(y).getJsonArray("data").getInt(x);
 //            }
 //        }
+    }
+    public ArrayList<int[]> getLayer() {
+        return layer;
+    }
+    public int[] getData() {
+        return data;
     }
 
     public void draw(FXGraphics2D g2d) {

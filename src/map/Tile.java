@@ -6,14 +6,14 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Tile {
     private int tileWidth;
     private int tileHeight;
-    private int[][] tiles;
-    private int mapWidth;
-    private int mapHeight;
-    private int dataArray;
+    private int[] tiles;
+    private ArrayList<int[]> dataArrays = new ArrayList<>();
+    private JsonArray data;
 
     public int getTileWidth() {
         return tileWidth;
@@ -36,12 +36,13 @@ public class Tile {
         this.tileWidth = root.getInt("tilewidth");
     }
 
-    public void saveTile(JsonArray layer) {
-        tiles = new int[tileHeight][tileWidth];
-
-        for (int x = 0; x < layer.size(); x++) {
-//            tiles[x] = layer.getJsonObject(x).getJsonArray("data").getInt(x);
+    public ArrayList<int[]> saveTile(JsonArray layer,int index) {
+        data = layer.getJsonObject(index).getJsonArray("data");
+        tiles = new int[data.size()];
+        for (int x = 0; x < data.size(); x++) {
+            tiles[x] = data.getInt(dataArrays.size());
+            dataArrays.add(tiles);
         }
+        return dataArrays;
     }
-
 }

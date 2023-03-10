@@ -1163,7 +1163,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"..\/..\/..\/..\/..\/Downloads\/simulatie\/ddpy71z-41398be7-7d93-453f-a8b6-dd7312fcabeb.tsx"
+         "source":"ddpy71z-41398be7-7d93-453f-a8b6-dd7312fcabeb.tsx"
         }, 
         {
          "columns":32,
@@ -1414,23 +1414,23 @@
         }, 
         {
          "firstgid":1409,
-         "source":"..\/..\/..\/..\/..\/Downloads\/simulatie\/PC Computer - Stardew Valley - Town Interior.tsx"
+         "source":"PC Computer - Stardew Valley - Town Interior.tsx"
         }, 
         {
          "firstgid":3585,
-         "source":"..\/..\/..\/..\/..\/Downloads\/simulatie\/Game Boy Advance - Pokemon Emerald - Interior Tilesets.tsx"
+         "source":"Game Boy Advance - Pokemon Emerald - Interior Tilesets.tsx"
         }, 
         {
          "firstgid":15873,
-         "source":"..\/..\/..\/..\/..\/Downloads\/simulatie\/New Piskel(1).tsx"
+         "source":"New Piskel.tsx"
         }, 
         {
          "firstgid":15873,
-         "source":"..\/..\/..\/..\/..\/Downloads\/simulatie\/darkwood.tsx"
+         "source":"darkwood.tsx"
         }, 
         {
          "firstgid":17921,
-         "source":"..\/..\/..\/..\/..\/Downloads\/simulatie\/door.tsx"
+         "source":"door.tsx"
         }],
  "tilewidth":16,
  "type":"map",

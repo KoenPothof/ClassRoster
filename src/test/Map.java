@@ -20,6 +20,7 @@ public class Map {
 	private int tileHeight;
 	private int tileWidth;
 
+
 	private ArrayList<BufferedImage> tiles = new ArrayList<>();
 
 	private int[][] map;
