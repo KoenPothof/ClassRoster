@@ -1,3 +1,4 @@
+import Data.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
@@ -9,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -17,8 +19,27 @@ public class AlternativeGui extends Application {
 
     private final FileConverter fileConverter = new FileConverter("data.txt");
 
+
     private final ArrayList<ComboBox<String>> comboBoxArrayList = new ArrayList<>();
+
+    private final ArrayList<ComboBox<String>> timeComboBoxArrayList = new ArrayList<>();
+    private final ArrayList<ComboBox<String>> subjectComboBoxArrayList = new ArrayList<>();
+    private final ArrayList<ComboBox<String>> teacherComboBoxArrayList = new ArrayList<>();
+    private final ArrayList<ComboBox<String>> classroomComboBoxArrayList = new ArrayList<>();
+    private final ArrayList<ComboBox<String>> groupComboBoxArrayList = new ArrayList<>();
+
+
+
     private final ArrayList<Label> labelArrayList = new ArrayList<>();
+
+    private final ArrayList<Label> timeLabelArrayList = new ArrayList<>();
+    private final ArrayList<Label> subjectLabelArrayList = new ArrayList<>();
+    private final ArrayList<Label> teacherLabelArrayList = new ArrayList<>();
+    private final ArrayList<Label> classroomLabelArrayList = new ArrayList<>();
+    private final ArrayList<Label> groupLabelArrayList = new ArrayList<>();
+
+
+
     private final ArrayList<Button> deleteButtonsArrayList = new ArrayList<>();
     private final ArrayList<ComboBox<String>> addComboBoxesArrayList = new ArrayList<>();
 
@@ -27,13 +48,13 @@ public class AlternativeGui extends Application {
     private final Integer[] addCheck = {0, 0, 0, 0, 0};
 
 
-//    private static ArrayList<String> timeArrayList = new ArrayList<>();
-//    private static ArrayList<String> subjectArrayList = new ArrayList<>();
-//    private static ArrayList<String> teacherArrayList = new ArrayList<>();
-//    private static ArrayList<String> locationArrayList = new ArrayList<>();
-//    private static ArrayList<String> groupArrayList = new ArrayList<>();
+    private static ArrayList<Time> timeArrayList = new ArrayList<>();
+    private static ArrayList<Subject> subjectArrayList = new ArrayList<>();
+    private static ArrayList<Teacher> teacherArrayList = new ArrayList<>();
+    private static ArrayList<Classroom> classroomArrayList = new ArrayList<>();
+    private static ArrayList<Group> groupArrayList = new ArrayList<>();
 
-
+    private ArrayList<Object> arrayListArray = new ArrayList<>();
     private final VBox vBoxTimeEdit = new VBox();
     private final VBox vBoxSubjectEdit = new VBox();
     private final VBox vBoxTeacherEdit = new VBox();
@@ -55,7 +76,6 @@ public class AlternativeGui extends Application {
     private final VBox[] vBoxesRooster = {vBoxTimeRooster, vBoxSubjectRooster, vBoxTeacherRooster, vBoxLocationRooster, vBoxGroupRooster};
 
     private final HBox hBoxRooster = new HBox();
-
 
 
     public static void main(String[] args) {
@@ -169,12 +189,12 @@ public class AlternativeGui extends Application {
 
         Tab editTab = new Tab("edit");
         editTab.setContent(editBorderPane);
-        editTab.setOnSelectionChanged(e->{
+        editTab.setOnSelectionChanged(e -> {
             refresh();
 //            System.out.println("editTab clicked"); // debug code
         });
 
-        roostermodule.getTabs().addAll(roosterTab,editTab);
+        roostermodule.getTabs().addAll(roosterTab, editTab);
 
         // --- ------- ---
 
@@ -283,6 +303,7 @@ public class AlternativeGui extends Application {
     private void labelsAdd() {
         for (int j = 0; j < 5; j++) {
             labelArrayList.add(new Label());
+            labelArrayListArray.get(j).
         }
         for (int j = labelArrayList.size() - 5; j < labelArrayList.size(); j++) {
             if (j / 5 % 2 == 1) {
