@@ -37,7 +37,7 @@ public class Map {
         try {
 
             JsonArray tileSets = root.getJsonArray("tilesets");
-
+// uitlezen Json en het snijden
             for (int i = 0; i < tileSets.size(); i++) {
                 JsonObject tileset = tileSets.getJsonObject(i);
                 System.out.println(tileset.getString("image"));

@@ -5,11 +5,11 @@ import org.jfree.fx.FXGraphics2D;
 import java.awt.image.BufferedImage;
 
 public class Layer {
-    private int [] data;
+    private int[] data;
 
 
     public Layer(int[] data) {
-     this.data = data;
+        this.data = data;
     }
 
     public void draw(FXGraphics2D g2d, Map map) {
@@ -19,8 +19,8 @@ public class Layer {
                 int tileId = data[index];
                 if (tileId == 0)
                     continue;
-                BufferedImage tileImage = map.getSlicedImage(tileId);
-                g2d.drawImage(tileImage,16*x,16*y,null);
+                BufferedImage tileImage = map.getSlicedImage(tileId - 1);
+                g2d.drawImage(tileImage, 16 * x, 16 * y, null);
             }
         }
     }
