@@ -40,7 +40,7 @@ public class MapTest extends Application {
     }
 
     public void init() {
-        map = new Map("project.json");
+        map = new Map("testmap.json");
     }
 
 

@@ -12,6 +12,8 @@ public class Tile {
     private int tileWidth;
     private int tileHeight;
     private int[][] tiles;
+    private int mapWidth;
+    private int mapHeight;
 
     public int getTileWidth() {
         return tileWidth;
@@ -32,13 +34,16 @@ public class Tile {
 
         this.tileHeight = root.getInt("tileheight");
         this.tileWidth = root.getInt("tilewidth");
+        mapWidth = root.getJsonArray("layers").getJsonObject(0).getInt("width");
+        mapHeight = root.getJsonArray("layers").getJsonObject(0).getInt("height");
+
     }
 
     public int[][] saveTile(JsonArray layer) {
-        tiles = new int[layer.size()][tileWidth*tileHeight];
+        tiles = new int[mapHeight][mapWidth];
 
         for (int y = 0; y < layer.size(); y++) {
-            for (int x = 0; x < tileWidth*tileHeight; x++) {
+            for (int x = 0; x < 112; x++) {
                 tiles[y][x] = layer.getJsonObject(y).getJsonArray("data").getInt(x);
             }
         }
