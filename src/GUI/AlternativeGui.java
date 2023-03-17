@@ -1,14 +1,24 @@
+package GUI;
+
+import Utilities.FileConverter;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import map.Map;
+import org.jfree.fx.FXGraphics2D;
+import org.jfree.fx.ResizableCanvas;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -59,39 +69,16 @@ public class AlternativeGui extends Application {
 
 
     public static void main(String[] args) {
-
-        // --- waarden om mee te testen ---
-//        String[] times = {"12:30-13:00", "13:30-14:00", "14:30-15:00"};
-//        String[] subjects = {"OOSD", "2d Graphics", "IPJ"};
-//        String[] teachers = {"hans", "johan", "joli"};
-//        String[] locations = {"LD112", "LA136", "OC106"};
-//        String[] groups = {"A1", "A2", "A3"};
-//
-//        String[] lesion1 = {times[0], subjects[0], teachers[0], locations[0], groups[0]};
-//        String[] lesion2 = {times[1], subjects[1], teachers[1], locations[1], groups[1]};
-//        String[] lesion3 = {times[2], subjects[2], teachers[2], locations[2], groups[2]};
-//        String[] lesion4 = {times[1], subjects[2], teachers[0], locations[2], groups[1]};
-//        String[] lesion5 = {times[2], subjects[0], teachers[0], locations[1], groups[1]};
-//
-//        data.add(times);
-//        data.add(subjects);
-//        data.add(teachers);
-//        data.add(locations);
-//        data.add(groups);
-//        data.add(lesion1);
-//        data.add(lesion2);
-//        data.add(lesion3);
-//        data.add(lesion4);
-//        data.add(lesion5);
-        // --- ------- -- --- -- ------ ---
-
         launch();
     }
+
+    private Map map;
+    private ResizableCanvas canvas;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         data = fileConverter.load();
-
+        map = new Map("map/project.json");
 
         // --- Labels ---
 
@@ -156,7 +143,32 @@ public class AlternativeGui extends Application {
         BorderPane editBorderPane = new BorderPane();
         editBorderPane.setCenter(hBoxEdit);
 
+        BorderPane simulationPane = new BorderPane();
+        canvas = new ResizableCanvas(g -> draw(g), simulationPane);
+        simulationPane.setCenter(canvas);
+
         // --- ----------- ---
+
+
+        // --- simulation tab ---
+
+        FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
+        new AnimationTimer() {
+            long last = -1;
+
+            @Override
+            public void handle(long now) {
+                if (last == -1)
+                    last = now;
+                update((now - last) / 1000000000.0);
+                last = now;
+                draw(g2d);
+            }
+        }.start();
+
+        draw(g2d);
+
+        // --- ---------- --- ---
 
 
         // --- TabPane ---
@@ -174,23 +186,41 @@ public class AlternativeGui extends Application {
 //            System.out.println("editTab clicked"); // debug code
         });
 
-        roostermodule.getTabs().addAll(roosterTab,editTab);
+        Tab simulationTab = new Tab("simulatie");
+        simulationTab.setContent(simulationPane);
+
+        roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
 
         // --- ------- ---
 
 
-        Image icon = new Image("Resources/mrBeast.png");
+
+
+        Image icon = new Image("gui_resources/burger.png");
         primaryStage.getIcons().add(icon);
 
         Scene scene = new Scene(roostermodule, 700, 500);
-        scene.getStylesheets().add("Resources/style.css");
+        scene.getStylesheets().add("gui_resources/style.css");
 
         refresh();
 
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false);
+        primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         primaryStage.setTitle("roostermodule");
         primaryStage.show();
+    }
+
+    public void draw(FXGraphics2D g) {
+        g.setBackground(Color.white);
+        g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        map.draw(g);
+    }
+
+
+    public void update(double deltaTime) {
+
+
     }
 
     private void topLabelsCreate(VBox vBoxTimeEdit, VBox vBoxSubjectEdit, VBox vBoxTeacherEdit, VBox vBoxLocationEdit, VBox vBoxGroupEdit) {

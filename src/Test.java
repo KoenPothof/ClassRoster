@@ -21,7 +21,7 @@ public class Test {
 //        classroom.add("CLASS3");
 ////        classroom.add("CLASS4");
 //
-//        FileConverter fileConverter = new FileConverter();
+//        Utilities.FileConverter fileConverter = new Utilities.FileConverter();
 //        fileConverter.save(filename, group.get(),classroom.get());
 ////        System.out.println(group);
 ////        System.out.println(classroom);
