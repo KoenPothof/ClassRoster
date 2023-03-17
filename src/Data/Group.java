@@ -7,6 +7,10 @@ public class Group {
         this.group = group;
     }
 
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
     @Override
     public String toString() {
         return group;

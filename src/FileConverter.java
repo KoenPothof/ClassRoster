@@ -1,3 +1,5 @@
+import Data.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -13,14 +15,14 @@ public class FileConverter {
         this.filename = filename;
     }
 
-    public void save(ArrayList<String[]> data){  // methode om naar file
-        try(PrintWriter pw = new PrintWriter(this.filename)) {
+    public void save(ArrayList<String[]> data) {  // methode om naar file
+        try (PrintWriter pw = new PrintWriter(this.filename)) {
             for (int i = 0; i < data.size(); i++) {
                 for (int j = 0; j < data.get(i).length; j++) {
-                    pw.print(data.get(i)[j]+"@");
+                    pw.print(data.get(i)[j] + "@");
 //                    System.out.println("Saved: " + data.get(i)[j]); // debug code
                 }
-                if (i != data.size()-1) {
+                if (i != data.size() - 1) {
                     pw.println();
                 }
             }
@@ -29,18 +31,18 @@ public class FileConverter {
         }
     }
 
-    public ArrayList<String[]> load(){
+    public ArrayList<String[]> load() {
         ArrayList<String[]> list = new ArrayList<>();
         File file = new File(this.filename);
 
-        try (Scanner input = new Scanner(file)){
-            while (input.hasNext()){
+        try (Scanner input = new Scanner(file)) {
+            while (input.hasNext()) {
                 String data = input.nextLine();
 //                System.out.println("Loaded: " + data); // debug code
                 list.add(data.split("@", 0));
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

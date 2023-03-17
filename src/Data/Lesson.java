@@ -1,5 +1,7 @@
 package Data;
 
+import java.lang.reflect.Array;
+
 public class Lesson {
     private Time time;
     private Subject subject;
@@ -33,6 +35,26 @@ public class Lesson {
 
     public Group getGroup() {
         return group;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     @Override
