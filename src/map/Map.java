@@ -22,7 +22,7 @@ public class Map {
     private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
     private ArrayList<Layer> layers = new ArrayList<>();
 
-    public Map(String fileName) {
+    public Map(String fileName) throws IOException {
         JsonReader reader = null;
         try {
             reader = Json.createReader(new FileInputStream("resources/" + fileName));
@@ -39,7 +39,7 @@ public class Map {
             JsonArray tileSets = root.getJsonArray("tilesets");
             for (int i = 0; i < tileSets.size(); i++) {
                 JsonObject tileset = tileSets.getJsonObject(i);
-                System.out.println(tileset.getString("image"));
+//                System.out.println(tileset.getString("image"));
                 BufferedImage image = ImageIO.read(new FileInputStream("resources/tilesets/" + tileset.getString("image")));
                 int gid = tileset.getInt("firstgid");
                 int tileHeight = tileset.getInt("tileheight");
@@ -53,14 +53,8 @@ public class Map {
             }
             tileHeight = root.getInt("tileheight");
             tileWidth = root.getInt("tilewidth");
-
-
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
 
         for (int i = 0; i < root.getJsonArray("layers").size(); i++) {
@@ -76,7 +70,7 @@ public class Map {
     public void draw(FXGraphics2D g2d) {
 
         for (Layer layer : layers) {
-            layer.draw(g2d,this);
+            layer.draw(g2d, this);
         }
     }
 
@@ -84,7 +78,7 @@ public class Map {
         return this.mapWidth;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return this.mapHeight;
     }
 

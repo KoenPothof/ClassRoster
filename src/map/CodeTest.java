@@ -36,7 +36,7 @@ public class CodeTest {
         ArrayList<ArrayList<Integer>> testLayer = new ArrayList<>();
         ArrayList<Integer> split = new ArrayList<>();
         split.add(20);
-         int[][] test = new int[height][width];
+        int[][] test = new int[height][width];
         chunksArray = layers.getJsonObject(0).getJsonArray("chunks");
 
         for (int i = 0; i < chunksArray.size(); i++) {

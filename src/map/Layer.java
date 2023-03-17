@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 public class Layer {
     private int[] data;
 
-
     public Layer(int[] data) {
         this.data = data;
     }
