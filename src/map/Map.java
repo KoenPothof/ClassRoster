@@ -34,14 +34,13 @@ public class Map {
         mapWidth = root.getInt("width");
         mapHeight = root.getInt("height");
 
+// uitlezen images en het snijden daarvan
         try {
-
             JsonArray tileSets = root.getJsonArray("tilesets");
-// uitlezen Json en het snijden
             for (int i = 0; i < tileSets.size(); i++) {
                 JsonObject tileset = tileSets.getJsonObject(i);
                 System.out.println(tileset.getString("image"));
-                BufferedImage image = ImageIO.read(new FileInputStream("resources/" + tileset.getString("image")));
+                BufferedImage image = ImageIO.read(new FileInputStream("resources/tilesets/" + tileset.getString("image")));
                 int gid = tileset.getInt("firstgid");
                 int tileHeight = tileset.getInt("tileheight");
                 int tileWidth = tileset.getInt("tilewidth");
