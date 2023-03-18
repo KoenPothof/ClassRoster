@@ -92,7 +92,6 @@ public class AlternativeGui extends Application {
         list = fileConverter.getList();
 
 
-
         // --- Labels ---
 
         topLabelsCreate(vBoxTimeEdit, vBoxSubjectEdit, vBoxTeacherEdit, vBoxLocationEdit, vBoxGroupEdit);
@@ -172,7 +171,7 @@ public class AlternativeGui extends Application {
             public void handle(long now) {
                 if (last == -1)
                     last = now;
-                update((now - last) / 1000000000.0);
+                update((now - last) / 10000.0);
                 last = now;
                 draw(g2d);
             }
@@ -205,8 +204,6 @@ public class AlternativeGui extends Application {
 
 
         // --- ------- ---
-
-
 
 
         Image icon = new Image("gui_resources/burger.png");
@@ -288,7 +285,7 @@ public class AlternativeGui extends Application {
         return sortedData;
     }
 
-    private void sort(){
+    private void sort() {
         ArrayList<String> howToSort = new ArrayList<>();
         ArrayList<Lesson> beforeSortLessons = new ArrayList<>(lessons);
         for (int i = 0; i < lessons.size(); i++) {
@@ -366,11 +363,16 @@ public class AlternativeGui extends Application {
         }
 
         int labelId = labelArrayList.size() - 5;
-        labelArrayList.get(labelId).setText(lessons.get(labelId/5).getTime().toString());
-        labelArrayList.get(labelId + 1).setText(lessons.get(labelId/5).getSubject().toString());
-        labelArrayList.get(labelId + 2).setText(lessons.get(labelId/5).getTeacher().toString());
-        labelArrayList.get(labelId + 3).setText(lessons.get(labelId/5).getClassroom().toString());
-        labelArrayList.get(labelId + 4).setText(lessons.get(labelId/5).getGroup().toString());
+        labelArrayList.get(labelId).setText(lessons.get(labelId / 5).getTime().toString());
+        labelArrayList.get(labelId + 1).setText(lessons.get(labelId / 5).getSubject().toString());
+        labelArrayList.get(labelId + 2).setText(lessons.get(labelId / 5).getTeacher().toString());
+        labelArrayList.get(labelId + 3).setText(lessons.get(labelId / 5).getClassroom().toString());
+        labelArrayList.get(labelId + 4).setText(lessons.get(labelId / 5).getGroup().toString());
+        if (labelId % 2 == 0) {
+            for (int i = labelId; i < labelId + 5; i++) {
+                labelArrayList.get(i).setStyle("-fx-background-color: #dddddd");
+            }
+        }
         vBoxesRooster[0].getChildren().add(labelArrayList.get(labelId));
         vBoxesRooster[1].getChildren().add(labelArrayList.get(labelId + 1));
         vBoxesRooster[2].getChildren().add(labelArrayList.get(labelId + 2));
@@ -430,10 +432,10 @@ public class AlternativeGui extends Application {
                 }
                 lessons.add(new Lesson(
                         times[dataHashMap.get(beta[0])],
-                        subjects[dataHashMap.get(beta[0])],
-                        teachers[dataHashMap.get(beta[0])],
-                        classrooms[dataHashMap.get(beta[0])],
-                        groups[dataHashMap.get(beta[0])]
+                        subjects[dataHashMap.get(beta[1])],
+                        teachers[dataHashMap.get(beta[2])],
+                        classrooms[dataHashMap.get(beta[3])],
+                        groups[dataHashMap.get(beta[4])]
                 ));
                 comboBoxesAdd();
                 labelsAdd();
