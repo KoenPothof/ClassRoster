@@ -1,28 +1,18 @@
 package Data;
 
-import java.util.ArrayList;
-
 public class Teacher {
-    private final ArrayList<String> teachers;
+    private String teacher;
 
-    public Teacher() {
-        teachers = new ArrayList<>();
+    public Teacher(String teacher) {
+        this.teacher = teacher;
     }
 
-    public void add(String teacher) {
-        this.teachers.add(teacher);
-    }
-
-    public ArrayList<String> get() {
-        return teachers;
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
     }
 
     @Override
     public String toString() {
-        String returnString = "";
-        for (String teacher : teachers) {
-            returnString = returnString + teacher + " ";
-        }
-        return returnString;
+        return teacher;
     }
 }

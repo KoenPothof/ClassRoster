@@ -2,6 +2,7 @@ package GUI;
 
 import Utilities.FileConverter;
 import javafx.animation.AnimationTimer;
+import Data.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
@@ -22,6 +23,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class AlternativeGui extends Application {
 
@@ -31,17 +33,19 @@ public class AlternativeGui extends Application {
     private final ArrayList<Label> labelArrayList = new ArrayList<>();
     private final ArrayList<Button> deleteButtonsArrayList = new ArrayList<>();
     private final ArrayList<ComboBox<String>> addComboBoxesArrayList = new ArrayList<>();
-
-    private ArrayList<String[]> data = new ArrayList<>();
-
     private final Integer[] addCheck = {0, 0, 0, 0, 0};
 
+    private ArrayList<String[]> list;
 
-//    private static ArrayList<String> timeArrayList = new ArrayList<>();
-//    private static ArrayList<String> subjectArrayList = new ArrayList<>();
-//    private static ArrayList<String> teacherArrayList = new ArrayList<>();
-//    private static ArrayList<String> locationArrayList = new ArrayList<>();
-//    private static ArrayList<String> groupArrayList = new ArrayList<>();
+    private ArrayList<Lesson> lessons = new ArrayList<>();
+
+    private static Time[] times;
+    private static Subject[] subjects;
+    private static Teacher[] teachers;
+    private static Classroom[] classrooms;
+    private static Group[] groups;
+
+    private HashMap<String, Integer> dataHashMap;
 
 
     private final VBox vBoxTimeEdit = new VBox();
@@ -66,8 +70,6 @@ public class AlternativeGui extends Application {
 
     private final HBox hBoxRooster = new HBox();
 
-
-
     public static void main(String[] args) {
         launch();
     }
@@ -77,8 +79,19 @@ public class AlternativeGui extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        data = fileConverter.load();
+
         map = new Map("map/project.json");
+
+        lessons = fileConverter.loadLessons();
+        times = fileConverter.getTimes();
+        subjects = fileConverter.getSubjects();
+        teachers = fileConverter.getTeachers();
+        classrooms = fileConverter.getClassrooms();
+        groups = fileConverter.getGroups();
+        dataHashMap = fileConverter.getDataHashMap();
+        list = fileConverter.getList();
+
+
 
         // --- Labels ---
 
@@ -88,7 +101,6 @@ public class AlternativeGui extends Application {
         Label DeleteAddLineEdit = new Label("----------");
         vBoxDeleteAddEdit.getChildren().add(DeleteAddLabelEdit);
         vBoxDeleteAddEdit.getChildren().add(DeleteAddLineEdit);
-
 
         topLabelsCreate(vBoxTimeRooster, vBoxSubjectRooster, vBoxTeacherRooster, vBoxLocationRooster, vBoxGroupRooster);
 
@@ -106,7 +118,7 @@ public class AlternativeGui extends Application {
         addButtonRow();
 
         // makes all the comboBoxes and buttons with the correct values
-        for (int i = 5; i < data.size(); i++) {
+        for (int i = 0; i < lessons.size(); i++) {
             comboBoxesAdd();
         }
 
@@ -125,7 +137,7 @@ public class AlternativeGui extends Application {
         }
 
         // makes all the Labes with the correct values
-        for (int i = 5; i < data.size(); i++) {
+        for (int i = 0; i < lessons.size(); i++) {
             labelsAdd();
         }
 
@@ -181,7 +193,7 @@ public class AlternativeGui extends Application {
 
         Tab editTab = new Tab("edit");
         editTab.setContent(editBorderPane);
-        editTab.setOnSelectionChanged(e->{
+        editTab.setOnSelectionChanged(e -> {
             refresh();
 //            System.out.println("editTab clicked"); // debug code
         });
@@ -190,6 +202,7 @@ public class AlternativeGui extends Application {
         simulationTab.setContent(simulationPane);
 
         roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
+
 
         // --- ------- ---
 
@@ -275,38 +288,75 @@ public class AlternativeGui extends Application {
         return sortedData;
     }
 
+    private void sort(){
+        ArrayList<String> howToSort = new ArrayList<>();
+        ArrayList<Lesson> beforeSortLessons = new ArrayList<>(lessons);
+        for (int i = 0; i < lessons.size(); i++) {
+            howToSort.add(lessons.get(i).toString() + "@" + i);
+        }
+        Collections.sort(howToSort);
+        for (int i = 0; i < howToSort.size(); i++) {
+            lessons.set(i, beforeSortLessons.get(Integer.parseInt(howToSort.get(i).split("@", 0)[1])));
+        }
+    }
+
 
     private void refresh() {
 //        System.out.println("refresh"); // debug code
-        data = arraySort(data);
-        for (int i = 0; i < labelArrayList.size(); i++) {
-            labelArrayList.get(i).setText(data.get(i / 5 + 5)[i % 5]);
-//            labelArrayList.get(i).setText((String) comboBoxArrayList.get(i).getValue());
+        sort();
+        for (int i = 0; i < lessons.size(); i++) {
+
+            String time = lessons.get(i).getTime().toString();
+            String subject = lessons.get(i).getSubject().toString();
+            String teacher = lessons.get(i).getTeacher().toString();
+            String classroom = lessons.get(i).getClassroom().toString();
+            String group = lessons.get(i).getGroup().toString();
+            // do something with the data
+            int alpha = i * 5;
+            labelArrayList.get(alpha).setText(time);
+            labelArrayList.get(alpha + 1).setText(subject);
+            labelArrayList.get(alpha + 2).setText(teacher);
+            labelArrayList.get(alpha + 3).setText(classroom);
+            labelArrayList.get(alpha + 4).setText(group);
+
+            comboBoxArrayList.get(alpha).setValue(time);
+            comboBoxArrayList.get(alpha + 1).setValue(subject);
+            comboBoxArrayList.get(alpha + 2).setValue(teacher);
+            comboBoxArrayList.get(alpha + 3).setValue(classroom);
+            comboBoxArrayList.get(alpha + 4).setValue(group);
         }
-        for (int i = 0; i < comboBoxArrayList.size(); i++) {
-            int alpha = i % 5;
-            comboBoxArrayList.get(i).setValue(data.get((5 + (i / 5)))[alpha]);
-        }
+
     }
 
 
     private void comboBoxesAdd() {
         for (int j = 0; j < 5; j++) {
-            comboBoxArrayList.add(new ComboBox<>(FXCollections.observableArrayList(data.get(j))));
+            comboBoxArrayList.add(new ComboBox<>(FXCollections.observableArrayList(list.get(j))));
+        }
 
-        }
-        for (int i = comboBoxArrayList.size() - 5; i < comboBoxArrayList.size(); i++) {
-            int comboBoxId = i;
-            int alpha = (comboBoxId / 5) + 5;
-            int beta = comboBoxId % 5;
-            comboBoxArrayList.get(i).setValue(data.get(alpha)[beta]);
-            comboBoxArrayList.get(i).setOnAction(e -> {
-//                System.out.println(finalI + " happend |" + comboBoxArrayList.get(finalI).getValue() + "|"); // debug code
-                data.get(alpha)[beta] = (String) comboBoxArrayList.get(comboBoxId).getValue();
-//                System.out.println("changed to: " + data.get(alpha)[beta]); // debug code
-            });
-            vBoxesEdit[i % 5].getChildren().add(comboBoxArrayList.get(i));
-        }
+        int comboBoxId = comboBoxArrayList.size() - 5;
+        vBoxesEdit[0].getChildren().add(comboBoxArrayList.get(comboBoxId));
+        vBoxesEdit[1].getChildren().add(comboBoxArrayList.get(comboBoxId + 1));
+        vBoxesEdit[2].getChildren().add(comboBoxArrayList.get(comboBoxId + 2));
+        vBoxesEdit[3].getChildren().add(comboBoxArrayList.get(comboBoxId + 3));
+        vBoxesEdit[4].getChildren().add(comboBoxArrayList.get(comboBoxId + 4));
+
+        int lessonId = comboBoxId / 5;
+        comboBoxArrayList.get(comboBoxId).setValue(lessons.get(lessonId).getTime().toString());
+        comboBoxArrayList.get(comboBoxId).setOnAction(e -> lessons.get(lessonId).setTime(times[dataHashMap.get(comboBoxArrayList.get(comboBoxId).getValue())]));
+
+        comboBoxArrayList.get(comboBoxId + 1).setValue(lessons.get(lessonId).getSubject().toString());
+        comboBoxArrayList.get(comboBoxId + 1).setOnAction(e -> lessons.get(lessonId).setSubject(subjects[dataHashMap.get(comboBoxArrayList.get(comboBoxId + 1).getValue())]));
+
+        comboBoxArrayList.get(comboBoxId + 2).setValue(lessons.get(lessonId).getTeacher().toString());
+        comboBoxArrayList.get(comboBoxId + 2).setOnAction(e -> lessons.get(lessonId).setTeacher(teachers[dataHashMap.get(comboBoxArrayList.get(comboBoxId + 2).getValue())]));
+
+        comboBoxArrayList.get(comboBoxId + 3).setValue(lessons.get(lessonId).getClassroom().toString());
+        comboBoxArrayList.get(comboBoxId + 3).setOnAction(e -> lessons.get(lessonId).setClassroom(classrooms[dataHashMap.get(comboBoxArrayList.get(comboBoxId + 3).getValue())]));
+
+        comboBoxArrayList.get(comboBoxId + 4).setValue(lessons.get(lessonId).getGroup().toString());
+        comboBoxArrayList.get(comboBoxId + 4).setOnAction(e -> lessons.get(lessonId).setGroup(groups[dataHashMap.get(comboBoxArrayList.get(comboBoxId + 4).getValue())]));
+
         deleteButtonAdd();
     }
 
@@ -314,13 +364,18 @@ public class AlternativeGui extends Application {
         for (int j = 0; j < 5; j++) {
             labelArrayList.add(new Label());
         }
-        for (int j = labelArrayList.size() - 5; j < labelArrayList.size(); j++) {
-            if (j / 5 % 2 == 1) {
-                labelArrayList.get(j).setStyle("-fx-background-color: #adadad");
-            }
-            labelArrayList.get(j).setText(data.get(j / 5 + 5)[j % 5]);
-            vBoxesRooster[j % 5].getChildren().add(labelArrayList.get(j));
-        }
+
+        int labelId = labelArrayList.size() - 5;
+        labelArrayList.get(labelId).setText(lessons.get(labelId/5).getTime().toString());
+        labelArrayList.get(labelId + 1).setText(lessons.get(labelId/5).getSubject().toString());
+        labelArrayList.get(labelId + 2).setText(lessons.get(labelId/5).getTeacher().toString());
+        labelArrayList.get(labelId + 3).setText(lessons.get(labelId/5).getClassroom().toString());
+        labelArrayList.get(labelId + 4).setText(lessons.get(labelId/5).getGroup().toString());
+        vBoxesRooster[0].getChildren().add(labelArrayList.get(labelId));
+        vBoxesRooster[1].getChildren().add(labelArrayList.get(labelId + 1));
+        vBoxesRooster[2].getChildren().add(labelArrayList.get(labelId + 2));
+        vBoxesRooster[3].getChildren().add(labelArrayList.get(labelId + 3));
+        vBoxesRooster[4].getChildren().add(labelArrayList.get(labelId + 4));
     }
 
     private void deleteButtonAdd() {
@@ -328,7 +383,8 @@ public class AlternativeGui extends Application {
         int buttonId = deleteButtonsArrayList.size() - 1;
         vBoxDeleteAddEdit.getChildren().add(deleteButtonsArrayList.get(buttonId));
         deleteButtonsArrayList.get(buttonId).setOnAction(e -> {
-            data.remove(buttonId + 5);
+//            data.remove(buttonId + 5);
+            lessons.remove(buttonId);
             for (int k = 0; k < vBoxesEdit.length; k++) {
                 vBoxesEdit[k].getChildren().remove(vBoxesEdit[k].getChildren().size() - 1);
                 vBoxesRooster[k].getChildren().remove(vBoxesRooster[k].getChildren().size() - 1);
@@ -346,7 +402,7 @@ public class AlternativeGui extends Application {
 
     private void addButtonRow() {
         for (int i = 0; i < 5; i++) {
-            addComboBoxesArrayList.add(new ComboBox<>(FXCollections.observableArrayList(data.get(i))));
+            addComboBoxesArrayList.add(new ComboBox<>(FXCollections.observableArrayList(list.get(i))));
             vBoxesEdit[i].getChildren().add(addComboBoxesArrayList.get(i));
         }
         Button addButton = new Button("add");
@@ -370,9 +426,15 @@ public class AlternativeGui extends Application {
             if (alpha == 5) {
                 String[] beta = {"", "", "", "", ""};
                 for (int j = 0; j < addComboBoxesArrayList.size(); j++) {
-                    beta[j] = (String) addComboBoxesArrayList.get(j).getValue();
+                    beta[j] = addComboBoxesArrayList.get(j).getValue();
                 }
-                data.add(beta);
+                lessons.add(new Lesson(
+                        times[dataHashMap.get(beta[0])],
+                        subjects[dataHashMap.get(beta[0])],
+                        teachers[dataHashMap.get(beta[0])],
+                        classrooms[dataHashMap.get(beta[0])],
+                        groups[dataHashMap.get(beta[0])]
+                ));
                 comboBoxesAdd();
                 labelsAdd();
                 refresh();
@@ -386,7 +448,8 @@ public class AlternativeGui extends Application {
 
     @Override
     public void stop() {
-//        System.out.println("\t closing application"); // debug code
-        fileConverter.save(arraySort(data));
+//        System.out.println("\n closing application"); // debug code
+        sort();
+        fileConverter.save(lessons);
     }
 }

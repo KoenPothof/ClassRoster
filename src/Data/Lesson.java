@@ -1,23 +1,70 @@
 package Data;
 
-import java.io.Serializable;
-import java.time.LocalTime;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
 
 public class Lesson {
+    private Time time;
     private Subject subject;
     private Teacher teacher;
     private Classroom classroom;
     private Group group;
-    private LocalTime startTime;
-    private LocalTime endTime;
 
-    public Lesson(Subject subject, Teacher teacher, Classroom classroom, Group group, LocalTime startTime, LocalTime endTime) {
+    public Lesson(Time time, Subject subject, Teacher teacher, Classroom classroom, Group group) {
+        this.time = time;
         this.subject = subject;
         this.teacher = teacher;
         this.classroom = classroom;
         this.group = group;
-        this.startTime = startTime;
-        this.endTime = endTime;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public Classroom getClassroom() {
+        return classroom;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setTime(Time time) {
+        this.time = time;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "time=" + time +
+                ", subject=" + subject +
+                ", teacher=" + teacher +
+                ", classroom=" + classroom +
+                ", group=" + group +
+                '}';
     }
 }

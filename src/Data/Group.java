@@ -1,30 +1,18 @@
 package Data;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Group {
-    private final List<String> groups;
+    private String group;
 
-    public Group() {
-        groups = new ArrayList<>();
+    public Group(String group) {
+        this.group = group;
     }
 
-    public void add(String group) {
-        this.groups.add(group);
-    }
-
-    public List<String> get() {
-        return groups;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     @Override
     public String toString() {
-        String returnString = "";
-        for (String group : groups) {
-            returnString = returnString + group + " ";
-        }
-        return returnString;
+        return group;
     }
 }
