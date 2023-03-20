@@ -1,11 +1,18 @@
 package Data;
 
-import java.util.ArrayList;
-
 public class Teacher {
-    private String name;
+    private String teacher;
 
-    public Teacher(String name) {
-        this.name = name;
+    public Teacher(String teacher) {
+        this.teacher = teacher;
+    }
+
+    public void setTeacher(String teacher) {
+        this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        return teacher;
     }
 }

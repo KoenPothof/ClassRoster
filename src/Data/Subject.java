@@ -1,6 +1,20 @@
 package Data;
 
-public enum Subject {
-    math, geography, English
+
+public class Subject {
+    private String subject;
+
+    public Subject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    @Override
+    public String toString() {
+        return subject;
+    }
 }
 

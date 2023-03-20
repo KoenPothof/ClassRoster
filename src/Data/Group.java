@@ -1,9 +1,18 @@
 package Data;
 
 public class Group {
-    private String classCode;
+    private String group;
 
-    public Group(String classCode) {
-        this.classCode = classCode;
+    public Group(String group) {
+        this.group = group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    @Override
+    public String toString() {
+        return group;
     }
 }

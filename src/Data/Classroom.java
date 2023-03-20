@@ -1,9 +1,18 @@
 package Data;
 
 public class Classroom {
-    private int classRoom;
+    private String classroom;
 
-    public Classroom(int classRoom) {
-        this.classRoom = classRoom;
+    public Classroom(String classroom) {
+        this.classroom = classroom;
+    }
+
+    public void setClassroom(String classroom) {
+        this.classroom = classroom;
+    }
+
+    @Override
+    public String toString() {
+        return classroom;
     }
 }
