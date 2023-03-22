@@ -76,6 +76,7 @@ public class AlternativeGui extends Application {
 
     private Map map;
     private ResizableCanvas canvas;
+    private boolean simulationOn = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -194,11 +195,18 @@ public class AlternativeGui extends Application {
         editTab.setContent(editBorderPane);
         editTab.setOnSelectionChanged(e -> {
             refresh();
-//            System.out.println("editTab clicked"); // debug code
+//            System.out.println("editTab changed"); // debug code
         });
+
 
         Tab simulationTab = new Tab("simulatie");
         simulationTab.setContent(simulationPane);
+        simulationPane.setOnMouseMoved(e -> {
+            simulationOn = true;
+        });
+        simulationTab.setOnSelectionChanged(e ->{
+            simulationOn = false;
+        });
 
         roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
 
@@ -224,7 +232,9 @@ public class AlternativeGui extends Application {
     public void draw(FXGraphics2D g) {
         g.setBackground(Color.white);
         g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-        map.draw(g);
+        if (simulationOn) {
+            map.draw(g);
+        }
     }
 
 
