@@ -59,12 +59,10 @@ public class Lesson {
 
     @Override
     public String toString() {
-        return "Lesson{" +
-                "time=" + time +
+        return "time=" + time +
                 ", subject=" + subject +
                 ", teacher=" + teacher +
                 ", classroom=" + classroom +
-                ", group=" + group +
-                '}';
+                ", group=" + group;
     }
 }
