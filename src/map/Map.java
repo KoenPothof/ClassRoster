@@ -13,8 +13,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Map {
+    private boolean wall;
     private int tileWidth;
     private int tileHeight;
     private int mapWidth;
@@ -58,14 +60,18 @@ public class Map {
             e.printStackTrace();
         }
 
+// leest alle data uit om de map te tekenen.
         for (int i = 0; i < root.getJsonArray("layers").size(); i++) {
             JsonObject layer = root.getJsonArray("layers").getJsonObject(i);
             int[] data = new int[layer.getJsonArray("data").size()];
             for (int j = 0; j < data.length; j++) {
                 data[j] = layer.getJsonArray("data").getInt(j);
             }
+//            System.out.println(Arrays.toString(data));
             layers.add(new Layer(data));
         }
+
+
     }
 
     public void draw(FXGraphics2D g2d) {
