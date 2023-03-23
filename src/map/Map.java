@@ -34,6 +34,7 @@ public class Map {
         mapWidth = root.getInt("width");
         mapHeight = root.getInt("height");
 
+
 // uitlezen images en het snijden daarvan
         try {
             JsonArray tileSets = root.getJsonArray("tilesets");
