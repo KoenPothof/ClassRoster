@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class AlternativeGui extends Application {
+public class Gui extends Application {
 
     private final FileConverter fileConverter = new FileConverter("data.txt");
 

@@ -16,9 +16,9 @@ public class GuiCanvas {
     private Map map;
     private ResizableCanvas canvas;
 
-    public GuiCanvas(BorderPane simulationPane) throws IOException {
+    public GuiCanvas(BorderPane borderPanePane) throws IOException {
         map = new Map("map/project.json");
-        canvas = new ResizableCanvas(g -> draw(g), simulationPane);
+        canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
         new AnimationTimer() {
             long last = -1;
@@ -40,10 +40,10 @@ public class GuiCanvas {
 
     }
 
-    public void draw(FXGraphics2D g) {
-        g.setBackground(Color.white);
-        g.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
-        map.draw(g);
+    public void draw(FXGraphics2D g2d) {
+        g2d.setBackground(Color.white);
+        g2d.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
+        map.draw(g2d);
     }
 
 
