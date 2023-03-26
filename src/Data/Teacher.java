@@ -7,10 +7,6 @@ public class Teacher {
         this.teacher = teacher;
     }
 
-    public void setTeacher(String teacher) {
-        this.teacher = teacher;
-    }
-
     @Override
     public String toString() {
         return teacher;
