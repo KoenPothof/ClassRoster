@@ -2,6 +2,8 @@ package map;
 
 import org.jfree.fx.FXGraphics2D;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Layer {
@@ -12,7 +14,8 @@ public class Layer {
     }
 
     public void draw(FXGraphics2D g2d, Map map) {
-
+        AffineTransform tx = new AffineTransform();
+        int count = 0;
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
                 int index = x + map.getWidth() * y;
