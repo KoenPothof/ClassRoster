@@ -126,7 +126,6 @@ public class Gui extends Application {
 
         BorderPane simulationPane = new BorderPane();
         GuiCanvas guiCanvas = new GuiCanvas(simulationPane);
-        simulationPane.setCenter(guiCanvas.getCanvas());
 
         // --- ----------- ---
 

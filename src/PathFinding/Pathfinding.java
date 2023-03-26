@@ -45,20 +45,6 @@ public class Pathfinding {
         pathfindingTiles = new PathfindingTile[data.length][data[0].length];
     }
 
-//    public int[][] getNeighbours(int x, int y) {
-//        int[][] neighbours = new int[4][2];
-//        neighbours[0][0] = x;
-//        neighbours[0][1] = y - 1;
-//        neighbours[1][0] = x + 1;
-//        neighbours[1][1] = y;
-//        neighbours[2][0] = x;
-//        neighbours[2][1] = y + 1;
-//        neighbours[3][0] = x - 1;
-//        neighbours[3][1] = y;
-//
-//        return neighbours;
-//    }
-
     public int[][] findPath(int targetX, int targetY) {
         queue.clear();
         pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
@@ -77,7 +63,7 @@ public class Pathfinding {
             int[][] neighbours = currentTile.getNeighbours();
             for (int i = 0; i < neighbours.length; i++) {
                 if (path[neighbours[i][0]][neighbours[i][1]] == 0) {
-                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y);
+                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, path[x][y] + 1);
                     queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
                     path[neighbours[i][0]][neighbours[i][1]] = path[x][y] + 1;
                 }
@@ -108,10 +94,8 @@ public class Pathfinding {
             for (int j = 0; j < pathfindingTiles[i].length; j++) {
                 if (pathfindingTiles[i][j] != null) {
                     g2d.setColor(Color.ORANGE);
-//                    g2d.fill(new Rectangle2D.Double(16 * i + 4, 16 * j + 4, 8, 8));
                     g2d.fill(new Ellipse2D.Double(16 * i + 5, 16 * j + 5, 6, 6));
-//                    g2d.setColor(Color.BLACK);
-                    g2d.setStroke(new BasicStroke(2.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10.0f, new float[]{10.0f}, 0.0f));
+                    g2d.setStroke(new BasicStroke(2.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER));
                     g2d.draw(new Line2D.Double(
                             pathfindingTiles[i][j].getTileX() * 16 + 8,
                             pathfindingTiles[i][j].getTileY() * 16 + 8,
@@ -123,14 +107,17 @@ public class Pathfinding {
                         g2d.setColor(Color.GREEN);
                         g2d.fill(new Rectangle2D.Double(16 * i, 16 * j, 16, 16));
                     }
+                }
+            }
+        }
+    }
 
-//                    g2d.setColor(Color.RED);
-//                    g2d.drawRect(16 * i, 16 * j, 16, 16);
-//                    g2d.setColor(Color.BLACK);
-//                    g2d.drawString(pathfindingTiles[i][j].getTileX() + " " + pathfindingTiles[i][j].getTileY(), 16 * i, 16 * j);
-
-//                    g2d.drawString(pathfindingTiles[i][j].getTileX() + " " + pathfindingTiles[i][j].getTileY(), 16 * i, 16 * j);
-
+    public void numberDraw(FXGraphics2D g2d) {
+        for (int i = 0; i < pathfindingTiles.length; i++) {
+            for (int j = 0; j < pathfindingTiles[i].length; j++) {
+                if (pathfindingTiles[i][j] != null) {
+                    g2d.setColor(Color.BLACK);
+                    g2d.drawString(String.valueOf(pathfindingTiles[i][j].getDistance()), 16 * i, 16 * j+10);
                 }
             }
         }
