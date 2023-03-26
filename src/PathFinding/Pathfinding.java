@@ -122,4 +122,8 @@ public class Pathfinding {
             }
         }
     }
+
+    public PathfindingTile[][] getPathfindingTiles() {
+        return pathfindingTiles;
+    }
 }
