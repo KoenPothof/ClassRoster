@@ -21,7 +21,31 @@ public class Pathfinding {
     private Queue<PathfindingTile> queue = new LinkedList<>();
 
 
-    public Pathfinding() {
+//    public Pathfinding() {
+//        JsonReader reader = null;
+//        try {
+//            reader = Json.createReader(new FileInputStream("resources/map/project.json"));
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        JsonObject root = reader.readObject();
+//
+//        int mapWidth = root.getInt("width");
+//        int mapHeight = root.getInt("height");
+//
+//        JsonObject layer = root.getJsonArray("layers").getJsonObject(0);
+//        data = new int[mapWidth][mapHeight];
+//        int count = 0;
+//        for (int y = 0; y < mapHeight; y++) {
+//            for (int x = 0; x < mapWidth; x++) {
+//                data[x][y] = layer.getJsonArray("data").getInt(count);
+//                count++;
+//            }
+//        }
+//        pathfindingTiles = new PathfindingTile[data.length][data[0].length];
+//    }
+
+    public Pathfinding(int targetX, int targetY) {
         JsonReader reader = null;
         try {
             reader = Json.createReader(new FileInputStream("resources/map/project.json"));
@@ -43,34 +67,53 @@ public class Pathfinding {
             }
         }
         pathfindingTiles = new PathfindingTile[data.length][data[0].length];
-    }
 
-    public int[][] findPath(int targetX, int targetY) {
         queue.clear();
         pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
         queue.add(new PathfindingTile(targetX, targetY));
-        int[][] path = new int[data.length][data[0].length];
-        for (int x = 0; x < data.length; x++) {
-            for (int y = 0; y < data[0].length; y++) {
-                path[x][y] = data[x][y];
-            }
-        }
-        path[targetX][targetY] = 1;
+        data[targetX][targetY] = 1;
         while (!queue.isEmpty()) {
             PathfindingTile currentTile = queue.remove();
             int x = currentTile.getTileX();
             int y = currentTile.getTileY();
             int[][] neighbours = currentTile.getNeighbours();
             for (int i = 0; i < neighbours.length; i++) {
-                if (path[neighbours[i][0]][neighbours[i][1]] == 0) {
-                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, path[x][y] + 1);
+                if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
+                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
                     queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
-                    path[neighbours[i][0]][neighbours[i][1]] = path[x][y] + 1;
+                    data[neighbours[i][0]][neighbours[i][1]] = data[x][y] + 1;
                 }
             }
         }
-        return path;
     }
+
+//    public int[][] findPath(int targetX, int targetY) {
+//        queue.clear();
+//        pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
+//        queue.add(new PathfindingTile(targetX, targetY));
+//        int[][] path = new int[data.length][data[0].length];
+//        for (int x = 0; x < data.length; x++) {
+//            for (int y = 0; y < data[0].length; y++) {
+//                path[x][y] = data[x][y];
+//            }
+//        }
+//        path[targetX][targetY] = 1;
+//        while (!queue.isEmpty()) {
+//            PathfindingTile currentTile = queue.remove();
+//            int x = currentTile.getTileX();
+//            int y = currentTile.getTileY();
+//            int[][] neighbours = currentTile.getNeighbours();
+//            for (int i = 0; i < neighbours.length; i++) {
+//                if (path[neighbours[i][0]][neighbours[i][1]] == 0) {
+//                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, path[x][y] + 1);
+//                    queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
+//                    path[neighbours[i][0]][neighbours[i][1]] = path[x][y] + 1;
+//                }
+//            }
+//        }
+//        return path;
+//    }
+
 
     public void dataCheck(int[][] data) {
         for (int y = 0; y < data[0].length; y++) {

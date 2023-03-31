@@ -62,6 +62,9 @@ public class Map {
 
 // leest alle data uit om de map te tekenen.
         for (int i = 0; i < root.getJsonArray("layers").size(); i++) {
+            if (i == 0) {
+                continue;
+            }
             JsonObject layer = root.getJsonArray("layers").getJsonObject(i);
             int[] data = new int[layer.getJsonArray("data").size()];
             for (int j = 0; j < data.length; j++) {

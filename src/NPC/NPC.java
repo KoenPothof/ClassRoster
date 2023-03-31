@@ -1,12 +1,10 @@
 package NPC;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class NPC {
@@ -14,8 +12,9 @@ public class NPC {
     private double positionY;
     private double targetX;
     private double targetY;
+    private boolean moving = false;
 
-    private final double speed = .9;
+    private final double speed = 4;
     private final int tileWidth = 16;
     private final int tileOffset = 8;
 
@@ -36,15 +35,17 @@ public class NPC {
 
     public void draw(Graphics2D g) {
         AffineTransform tx = new AffineTransform();
-        tx.translate(positionX - image.getWidth() / 2, positionY - image.getHeight() / 2);
-        tx.scale(2, 2);
+
+        tx.translate(positionX, positionY);
+        tx.scale(1.5, 2.3);
+        tx.translate(-image.getWidth()/2d, -image.getHeight()/1.2d);
+
         g.drawImage(image, tx, null);
         g.setColor(Color.ORANGE);
-        g.draw(new Ellipse2D.Double(positionX - 5, positionY - 5, 10, 10));
+        g.draw(new Ellipse2D.Double(positionX - 10, positionY - 10, 20, 20));
 
     }
 
-    // zorgt voor lopen naar muis target inplaats dit zou mapping hier moeten
     public void update(ArrayList<NPC> npcs) {
         double angleTo = Math.atan2(targetY - positionY, targetX - positionX);
 
@@ -85,6 +86,10 @@ public class NPC {
         this.targetX = x * tileWidth + tileOffset;
         this.targetY = y * tileWidth + tileOffset;
 //        this.target = new Point2D.Double(x * tileWidth - tileOffset, y * tileWidth - tileOffset);
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
     }
 
     // plek van popetje

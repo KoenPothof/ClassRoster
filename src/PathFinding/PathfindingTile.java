@@ -33,14 +33,14 @@ public class PathfindingTile {
         neighbours[2][1] = tileY + 1;
         neighbours[3][0] = tileX - 1;
         neighbours[3][1] = tileY;
-        neighbours[4][0] = tileX + 1;
-        neighbours[4][1] = tileY + 1;
-        neighbours[5][0] = tileX + 1;
-        neighbours[5][1] = tileY - 1;
-        neighbours[6][0] = tileX - 1;
-        neighbours[6][1] = tileY - 1;
-        neighbours[7][0] = tileX - 1;
-        neighbours[7][1] = tileY + 1;
+//        neighbours[4][0] = tileX + 1;
+//        neighbours[4][1] = tileY + 1;
+//        neighbours[5][0] = tileX + 1;
+//        neighbours[5][1] = tileY - 1;
+//        neighbours[6][0] = tileX - 1;
+//        neighbours[6][1] = tileY - 1;
+//        neighbours[7][0] = tileX - 1;
+//        neighbours[7][1] = tileY + 1;
 
         
         return neighbours;
