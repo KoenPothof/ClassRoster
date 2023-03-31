@@ -80,24 +80,21 @@ public class NotAFinalName {
             case UP:
                 if (teller2 > 3)
                     teller2 = 0;
-
                 break;
             case DOWN:
                 if (teller2 > 7)
                     teller2 = 4;
-
                 break;
             case LEFT:
                 if (teller2 > 11)
                     teller2 = 8;
-
                 break;
             case RIGHT:
                 if (teller2 > 15)
                     teller2 = 12;
-
                 break;
         }
+        teller2++;
 
 //        if (walkDown) {
 //            y += 1;

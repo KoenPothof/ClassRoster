@@ -21,7 +21,7 @@ public class GuiCanvas {
     private Pathfinding pathfinding;
     private ResizableCanvas canvas;
 
-    ArrayList<NPC> npcs = new ArrayList<>();
+    private ArrayList<NPC> npcs = new ArrayList<>();
 
     Point2D clipPosition = new Point2D.Double(50 * 16, 50 * 16);
 
@@ -33,15 +33,15 @@ public class GuiCanvas {
 
         borderPanePane.setCenter(canvas);
 
-        NPC npc = new NPC(100, 56);
+        NPC npc = new NPC(12, 10);
         npcs.add(npc);
 
         canvas.setOnMouseClicked(e -> {
             clipPosition = new Point2D.Double(e.getX(), e.getY());
-            pathfinding.findPath((int) clipPosition.getX() / 16, (int) clipPosition.getY() / 16);
+            pathfinding.findPath((int) e.getX() / 16, (int) e.getY() / 16);
             draw(g2d);
         });
-        pathfinding.findPath(50, 50);
+        pathfinding.findPath(14, 14);
 
         new AnimationTimer() {
             long last = -1;
@@ -50,7 +50,7 @@ public class GuiCanvas {
             public void handle(long now) {
                 if (last == -1)
                     last = now;
-                update((now - last) / 10000.0);
+                update((now - last) / 100.0);
                 last = now;
                 try {
 //                    pathfinding.findPath((int) clipPosition.getX() / 16, (int) clipPosition.getY() / 16);
@@ -74,19 +74,20 @@ public class GuiCanvas {
         for (NPC npc : npcs)
             npc.draw(g2d);
 
-//        pathfinding.draw(g2d);
+        pathfinding.draw(g2d);
 //        pathfinding.numberDraw(g2d);
     }
 
     public void update(double deltaTime) {
         for (NPC npc : npcs) {
-            if (deltaTime % 10 == 0) {
-                npc.getNotAFinalName().update();
-                npc.setTarget(pathfinding.getPathfindingTiles()[npc.getPosition()[0]][npc.getPosition()[1]].getTargetTileX(), pathfinding.getPathfindingTiles()[npc.getPosition()[0]][npc.getPosition()[1]].getTargetTileY());
-
+            int npcX = npc.getPosition()[0];
+            int npcY = npc.getPosition()[1];
+            int[] nextTile = pathfinding.getNextTile(npcX,npcY);
+            if (npc.getPosition()[0] == npc.getTarget()[0] && npc.getPosition()[1] == npc.getTarget()[1]) {
+                npc.setTarget(nextTile[0], nextTile[1]);
             }
-
             npc.update(npcs);
+
         }
     }
 

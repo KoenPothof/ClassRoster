@@ -99,8 +99,8 @@ public class Pathfinding {
                     g2d.draw(new Line2D.Double(
                             pathfindingTiles[i][j].getTileX() * 16 + 8,
                             pathfindingTiles[i][j].getTileY() * 16 + 8,
-                            pathfindingTiles[i][j].getTargetTileX()  * 16 + 8,
-                            pathfindingTiles[i][j].getTargetTileY()  * 16 + 8
+                            pathfindingTiles[i][j].getTargetTileX() * 16 + 8,
+                            pathfindingTiles[i][j].getTargetTileY() * 16 + 8
                     ));
 
                     if (pathfindingTiles[i][j].getTargetTileX() == i && pathfindingTiles[i][j].getTargetTileY() == j) {
@@ -117,7 +117,7 @@ public class Pathfinding {
             for (int j = 0; j < pathfindingTiles[i].length; j++) {
                 if (pathfindingTiles[i][j] != null) {
                     g2d.setColor(Color.BLACK);
-                    g2d.drawString(String.valueOf(pathfindingTiles[i][j].getDistance()), 16 * i, 16 * j+10);
+                    g2d.drawString(String.valueOf(pathfindingTiles[i][j].getDistance()), 16 * i, 16 * j + 10);
                 }
             }
         }
@@ -126,4 +126,14 @@ public class Pathfinding {
     public PathfindingTile[][] getPathfindingTiles() {
         return pathfindingTiles;
     }
+
+    public int[] getNextTile(int x, int y) {
+        int[] nextTile = new int[2];
+        nextTile[0] = pathfindingTiles[x][y].getTargetTileX();
+        nextTile[1] = pathfindingTiles[x][y].getTargetTileY();
+
+        return nextTile;
+    }
+
+
 }
