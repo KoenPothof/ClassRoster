@@ -1,12 +1,12 @@
 package map;
 
+import Utilities.JsonReader;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Map {
+    private Utilities.JsonReader jsonReader;
     private boolean wall;
     private int tileWidth;
     private int tileHeight;
@@ -25,21 +26,17 @@ public class Map {
     private ArrayList<Layer> layers = new ArrayList<>();
 
     public Map(String fileName) throws IOException {
-        JsonReader reader = null;
-        try {
-            reader = Json.createReader(new FileInputStream("resources/" + fileName));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JsonObject root = reader.readObject();
 
-        mapWidth = root.getInt("width");
-        mapHeight = root.getInt("height");
+        this.jsonReader = new JsonReader();
+        JsonArray layerArray = this.jsonReader.getLayerArray();
+
+        mapWidth = jsonReader.getMapWidth();
+        mapHeight = jsonReader.getMapHeight();
 
 
 // uitlezen images en het snijden daarvan
         try {
-            JsonArray tileSets = root.getJsonArray("tilesets");
+            JsonArray tileSets = jsonReader.getTileSets();
             for (int i = 0; i < tileSets.size(); i++) {
                 JsonObject tileset = tileSets.getJsonObject(i);
 //                System.out.println(tileset.getString("image"));
@@ -54,15 +51,15 @@ public class Map {
                     }
                 }
             }
-            tileHeight = root.getInt("tileheight");
-            tileWidth = root.getInt("tilewidth");
+            tileHeight = jsonReader.getTileHeight();
+            tileWidth = jsonReader.getTileWidth();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 // leest alle data uit om de map te tekenen.
-        for (int i = 0; i < root.getJsonArray("layers").size(); i++) {
-            JsonObject layer = root.getJsonArray("layers").getJsonObject(i);
+        for (int i = 0; i < layerArray.size(); i++) {
+            JsonObject layer = layerArray.getJsonObject(i);
             int[] data = new int[layer.getJsonArray("data").size()];
             for (int j = 0; j < data.length; j++) {
                 data[j] = layer.getJsonArray("data").getInt(j);
