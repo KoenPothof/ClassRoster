@@ -37,34 +37,53 @@ public class Pathfinding {
             }
         }
         pathfindingTiles = new PathfindingTile[data.length][data[0].length];
-    }
 
-    public int[][] findPath(int targetX, int targetY) {
         queue.clear();
         pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
         queue.add(new PathfindingTile(targetX, targetY));
-        int[][] path = new int[data.length][data[0].length];
-        for (int x = 0; x < data.length; x++) {
-            for (int y = 0; y < data[0].length; y++) {
-                path[x][y] = data[x][y];
-            }
-        }
-        path[targetX][targetY] = 1;
+        data[targetX][targetY] = 1;
         while (!queue.isEmpty()) {
             PathfindingTile currentTile = queue.remove();
             int x = currentTile.getTileX();
             int y = currentTile.getTileY();
             int[][] neighbours = currentTile.getNeighbours();
             for (int i = 0; i < neighbours.length; i++) {
-                if (path[neighbours[i][0]][neighbours[i][1]] == 0) {
-                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, path[x][y] + 1);
+                if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
+                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
                     queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
-                    path[neighbours[i][0]][neighbours[i][1]] = path[x][y] + 1;
+                    data[neighbours[i][0]][neighbours[i][1]] = data[x][y] + 1;
                 }
             }
         }
-        return path;
     }
+
+//    public int[][] findPath(int targetX, int targetY) {
+//        queue.clear();
+//        pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
+//        queue.add(new PathfindingTile(targetX, targetY));
+//        int[][] path = new int[data.length][data[0].length];
+//        for (int x = 0; x < data.length; x++) {
+//            for (int y = 0; y < data[0].length; y++) {
+//                path[x][y] = data[x][y];
+//            }
+//        }
+//        path[targetX][targetY] = 1;
+//        while (!queue.isEmpty()) {
+//            PathfindingTile currentTile = queue.remove();
+//            int x = currentTile.getTileX();
+//            int y = currentTile.getTileY();
+//            int[][] neighbours = currentTile.getNeighbours();
+//            for (int i = 0; i < neighbours.length; i++) {
+//                if (path[neighbours[i][0]][neighbours[i][1]] == 0) {
+//                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, path[x][y] + 1);
+//                    queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
+//                    path[neighbours[i][0]][neighbours[i][1]] = path[x][y] + 1;
+//                }
+//            }
+//        }
+//        return path;
+//    }
+
 
     public void dataCheck(int[][] data) {
         for (int y = 0; y < data[0].length; y++) {
@@ -93,8 +112,8 @@ public class Pathfinding {
                     g2d.draw(new Line2D.Double(
                             pathfindingTiles[i][j].getTileX() * 16 + 8,
                             pathfindingTiles[i][j].getTileY() * 16 + 8,
-                            pathfindingTiles[i][j].getTargetTileX()  * 16 + 8,
-                            pathfindingTiles[i][j].getTargetTileY()  * 16 + 8
+                            pathfindingTiles[i][j].getTargetTileX() * 16 + 8,
+                            pathfindingTiles[i][j].getTargetTileY() * 16 + 8
                     ));
 
                     if (pathfindingTiles[i][j].getTargetTileX() == i && pathfindingTiles[i][j].getTargetTileY() == j) {
@@ -111,9 +130,23 @@ public class Pathfinding {
             for (int j = 0; j < pathfindingTiles[i].length; j++) {
                 if (pathfindingTiles[i][j] != null) {
                     g2d.setColor(Color.BLACK);
-                    g2d.drawString(String.valueOf(pathfindingTiles[i][j].getDistance()), 16 * i, 16 * j+10);
+                    g2d.drawString(String.valueOf(pathfindingTiles[i][j].getDistance()), 16 * i, 16 * j + 10);
                 }
             }
         }
     }
+
+    public PathfindingTile[][] getPathfindingTiles() {
+        return pathfindingTiles;
+    }
+
+    public int[] getNextTile(int x, int y) {
+        int[] nextTile = new int[2];
+        nextTile[0] = pathfindingTiles[x][y].getTargetTileX();
+        nextTile[1] = pathfindingTiles[x][y].getTargetTileY();
+
+        return nextTile;
+    }
+
+
 }

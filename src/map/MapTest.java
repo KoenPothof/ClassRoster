@@ -36,7 +36,7 @@ public class MapTest extends Application {
         }.start();
 
         stage.setScene(new Scene(mainPane));
-        stage.setTitle("Map Test");
+        stage.setTitle("Map test.Test");
         stage.show();
         draw(g2d);
     }

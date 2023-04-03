@@ -5,6 +5,9 @@ public class Group {
 
     public Group(String group) {
         this.group = group;
+        for (int i = 0; i < 16; i++) {
+
+        }
     }
 
     @Override
