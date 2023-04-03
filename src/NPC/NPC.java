@@ -59,7 +59,7 @@ public class NPC {
         // dit is de collision
         // als we collision met muren willen dan moeten we die toevoegen aan de muren arraylist
 
-        ArrayList muren = new ArrayList<Point2D>();
+        ArrayList muren = new ArrayList<Wall>();
 
         boolean hasCollision = false;
         for (NPC npc : npcs) {

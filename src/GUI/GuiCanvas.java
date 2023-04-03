@@ -73,8 +73,8 @@ public class GuiCanvas {
         for (NPC npc : npcs)
             npc.draw(g2d);
 
-        pathfinding.draw(g2d);
-//        pathfinding.numberDraw(g2d);
+//        pathfinding.draw(g2d);
+        pathfinding.numberDraw(g2d);
     }
 
     public void update(double deltaTime) {
