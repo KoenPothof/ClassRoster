@@ -19,26 +19,20 @@ public class Pathfinding {
     private int[][] data;
     private PathfindingTile[][] pathfindingTiles;
     private Queue<PathfindingTile> queue = new LinkedList<>();
+    private Utilities.JsonReader jsonReader;
 
 
     public Pathfinding() {
-        JsonReader reader = null;
-        try {
-            reader = Json.createReader(new FileInputStream("resources/map/project.json"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JsonObject root = reader.readObject();
+        this.jsonReader = new Utilities.JsonReader("Walls");
 
-        int mapWidth = root.getInt("width");
-        int mapHeight = root.getInt("height");
+        int mapWidth = jsonReader.getMapWidth();
+        int mapHeight = jsonReader.getMapHeight();
 
-        JsonObject layer = root.getJsonArray("layers").getJsonObject(0);
         data = new int[mapWidth][mapHeight];
         int count = 0;
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
-                data[x][y] = layer.getJsonArray("data").getInt(count);
+                data[x][y] = jsonReader.getDataArray().getInt(count);
                 count++;
             }
         }
