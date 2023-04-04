@@ -59,9 +59,6 @@ public class Gui extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-
-
-
         // --- Labels ---
 
         topLabelsCreate(vBoxTimeEdit, vBoxSubjectEdit, vBoxTeacherEdit, vBoxLocationEdit, vBoxGroupEdit);
@@ -125,7 +122,7 @@ public class Gui extends Application {
         editBorderPane.setCenter(hBoxEdit);
 
         BorderPane simulationPane = new BorderPane();
-        GuiCanvas guiCanvas = new GuiCanvas(simulationPane);
+        GuiCanvas guiCanvas = new GuiCanvas(simulationPane, fileConverter);
 
         // --- ----------- ---
 
@@ -383,4 +380,5 @@ public class Gui extends Application {
 //        System.out.println("\n closing application"); // debug code
         fileConverter.save();
     }
+
 }

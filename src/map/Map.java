@@ -1,19 +1,32 @@
 package map;
 
 import Utilities.JsonReader;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+
 
 public class Map {
     private Utilities.JsonReader jsonReader;
@@ -24,6 +37,7 @@ public class Map {
     private int mapHeight;
     private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
     private ArrayList<Layer> layers = new ArrayList<>();
+    private BufferedImage screenshot;
 
     public Map(String fileName) throws IOException {
 
@@ -50,6 +64,10 @@ public class Map {
                         gid++;
                     }
                 }
+
+
+
+
             }
             tileHeight = jsonReader.getTileHeight();
             tileWidth = jsonReader.getTileWidth();
@@ -57,8 +75,11 @@ public class Map {
             e.printStackTrace();
         }
 
+
 // leest alle data uit om de map te tekenen.
         for (int i = 0; i < layerArray.size(); i++) {
+            if (i == 1)
+                continue;
             JsonObject layer = layerArray.getJsonObject(i);
             int[] data = new int[layer.getJsonArray("data").size()];
             for (int j = 0; j < data.length; j++) {
@@ -69,13 +90,52 @@ public class Map {
         }
 
 
+// ______________________________________________________________________________________________________________________________________________________________________________________________
+
+        // create a new canvas with the same size as the screenshot
+        JsonObject layer = layerArray.getJsonObject(2);
+        int[] data = new int[layer.getJsonArray("data").size()];
+        for (int j = 0; j < data.length; j++) {
+            data[j] = layer.getJsonArray("data").getInt(j);
+        }
+
+        javafx.scene.canvas.Canvas canvas = new javafx.scene.canvas.Canvas(1920, 1080);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                int index = x + mapWidth * y;
+                int tileId = data[index];
+                if (tileId <= 0)
+                    continue;
+                BufferedImage tileImage = getSlicedImage(tileId - 1);
+                Image deWerkendeImage = SwingFXUtils.toFXImage(tileImage, null);
+                gc.drawImage(deWerkendeImage, 16 * x, 16 * y);
+            }
+        }
+
+        // take a snapshot of the canvas and draw it onto the graphics object
+        SnapshotParameters parameters = new SnapshotParameters();
+        WritableImage snapshot = canvas.snapshot(parameters, null);
+
+        File output = new File("HetWerktAAAAAAAAAAAA.png");
+        ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
+        screenshot = ImageIO.read(new FileInputStream("HetWerktAAAAAAAAAAAA.png"));
+
+// ____________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
     }
 
     public void draw(FXGraphics2D g2d) {
 
-        for (Layer layer : layers) {
-            layer.draw(g2d, this);
-        }
+//        for (Layer layer : layers) {
+//            layer.draw(g2d, this);
+//        }
+        g2d.drawImage(screenshot, 0, 0, null);
+
+
     }
 
     public int getWidth() {

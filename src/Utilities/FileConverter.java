@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class FileConverter {
 
     private String filename;
+    private JsonReader jsonReader;
     private Time[] times;
     private Subject[] subjects;
     private Teacher[] teachers;
@@ -26,6 +27,7 @@ public class FileConverter {
 
     public FileConverter(String filename) {
         this.filename = filename;
+        this.jsonReader = new JsonReader();
         loadData();
     }
 
@@ -154,11 +156,12 @@ public class FileConverter {
                 ));
 
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
     }
 
     public Time[] getTimes() {
@@ -191,5 +194,9 @@ public class FileConverter {
 
     public ArrayList<String[]> getList() {
         return list;
+    }
+
+    public JsonReader getJsonReader() {
+        return jsonReader;
     }
 }

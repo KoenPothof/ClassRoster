@@ -1,7 +1,10 @@
 package GUI;
 
+import Data.Group;
 import NPC.NPC;
+import NPC.NPCConsole;
 import PathFinding.Pathfinding;
+import Utilities.FileConverter;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.BorderPane;
 import map.Map;
@@ -20,21 +23,34 @@ public class GuiCanvas {
     private Map map;
     private Pathfinding pathfinding;
     private ResizableCanvas canvas;
-
+    private FileConverter fileConverter;
     private ArrayList<NPC> npcs = new ArrayList<>();
+
+    private NPCConsole npcConsole;
 
     Point2D clipPosition = new Point2D.Double(50 * 16, 50 * 16);
 
-    public GuiCanvas(BorderPane borderPanePane) throws IOException {
+    public GuiCanvas(BorderPane borderPanePane, FileConverter fileConverter) throws IOException {
         map = new Map("map/project.json");
         pathfinding = new Pathfinding(50, 50);
         canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         borderPanePane.setCenter(canvas);
+        this.fileConverter = fileConverter;
 
-        NPC npc = new NPC(12, 10);
-        npcs.add(npc);
+//        NPC npc = new NPC(12, 10);
+//        NPC npc2 = new NPC(11, 10);
+//        Group group1 = new Group();
+
+
+        for (int i = 0; i < fileConverter.getGroups().length; i++) {
+            for (int j = 0; j < fileConverter.getGroups()[i].getNPCs().length; j++) {
+                npcs.add(fileConverter.getGroups()[i].getNPCs()[j]);
+            }
+        }
+//        npcs.add(npc);
+//        npcs.add(npc2);
 
 //        canvas.setOnMouseClicked(e -> {
 //            clipPosition = new Point2D.Double(e.getX(), e.getY());
@@ -43,6 +59,7 @@ public class GuiCanvas {
 //        });
 //        pathfinding.findPath(14, 14);
 
+        npcConsole = new NPCConsole(npcs, fileConverter);
         new AnimationTimer() {
             long last = -1;
 
@@ -73,23 +90,12 @@ public class GuiCanvas {
         for (NPC npc : npcs)
             npc.draw(g2d);
 
-//        pathfinding.draw(g2d);
-        pathfinding.numberDraw(g2d);
+        pathfinding.draw(g2d);
+//        pathfinding.numberDraw(g2d);
     }
 
     public void update(double deltaTime) {
-        for (NPC npc : npcs) {
-            int npcX = npc.getPosition()[0];
-            int npcY = npc.getPosition()[1];
-            int[] nextTile = pathfinding.getNextTile(npcX, npcY);
-            if (npc.getPosition()[0] == npc.getTarget()[0] && npc.getPosition()[1] == npc.getTarget()[1] && deltaTime % 100 < 1) {
-                npc.setTarget(nextTile[0], nextTile[1]);
-            }
-
-
-            npc.update(npcs);
-
-        }
+        npcConsole.update();
     }
 
     public void setSimulationOn(boolean simulationOn) {

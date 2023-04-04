@@ -14,15 +14,16 @@ public class Layer {
     }
 
     public void draw(FXGraphics2D g2d, Map map) {
-        AffineTransform tx = new AffineTransform();
-        int count = 0;
+//        AffineTransform tx = new AffineTransform();
+//        int count = 0;
         for (int x = 0; x < map.getWidth(); x++) {
             for (int y = 0; y < map.getHeight(); y++) {
-                int index = x + map.getWidth() * y;
+//                int index = x + map.getWidth() * y;
+                int index = 20;
                 int tileId = data[index];
                 if (tileId <= 0)
                     continue;
-                BufferedImage tileImage = map.getSlicedImage(tileId - 1);
+                BufferedImage tileImage = map.getSlicedImage(20 - 1);
                 g2d.drawImage(tileImage, 16 * x, 16 * y, null);
             }
         }
