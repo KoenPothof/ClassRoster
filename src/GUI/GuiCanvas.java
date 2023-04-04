@@ -33,11 +33,11 @@ public class GuiCanvas {
     private NPCConsole npcConsole;
 
     private int counter = 0;
-    private final long timerTime = 10000; // 1000 = 1 second
+    private final long timerTime = 1; // 1000 = 1 second
 
     public GuiCanvas(BorderPane borderPanePane, FileConverter fileConverter) throws IOException {
         map = new Map("map/project.json");
-        pathfinding = new Pathfinding(64,47);
+        pathfinding = new Pathfinding(15,20);
         canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
@@ -69,7 +69,8 @@ public class GuiCanvas {
         task = new TimerTask() {
             @Override
             public void run() {
-                npcConsole.pathfindingUpdate();
+                if (counter%200 == 0)
+                    npcConsole.pathfindingUpdate();
                 counter++;
             }
         };
@@ -82,9 +83,10 @@ public class GuiCanvas {
         g2d.setBackground(Color.white);
         g2d.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
         map.draw(g2d);
+//        pathfinding.draw(g2d);
         npcConsole.draw(g2d);
 
-//        pathfinding.draw(g2d);
+
 //        pathfinding.numberDraw(g2d);
     }
 
@@ -103,5 +105,9 @@ public class GuiCanvas {
 
     public Timer getTimer() {
         return timer;
+    }
+
+    public NPCConsole getNpcConsole() {
+        return npcConsole;
     }
 }

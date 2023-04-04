@@ -18,13 +18,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class Gui extends Application {
 
@@ -152,7 +149,9 @@ public class Gui extends Application {
 //            System.out.println("editTab changed"); // debug code
         });
 
+        // --- ------- ---
 
+        // --- simulation tab ---
         Tab simulationTab = new Tab("simulatie");
 
         BufferedImage buttonImages = ImageIO.read(getClass().getResource("/gui_resources/buttons.png"));
@@ -174,8 +173,9 @@ public class Gui extends Application {
         pauseButton.setMaxWidth(20);
 
 
-        double speed = 1.0;
-        Label speedLabel = new Label("Speed: " + speed);
+
+        Label speedLabel = new Label("Speed: ");
+        Label speedLabel2 = new Label( "1.0");
         Button slower = new Button("Slower");
         Button faster = new Button("Faster");
 
@@ -184,19 +184,18 @@ public class Gui extends Application {
             if (index != -2) {
                 index--;
             }
-            newSpeed(speed, speedLabel);
+            newSpeed(speedLabel2);
         });
 
         faster.setOnAction(event -> {
             if (index != 5) {
                 index++;
             }
-            newSpeed(speed, speedLabel);
+            newSpeed(speedLabel2);
         });
 
-
         VBox buttons = new VBox();
-        buttons.getChildren().addAll(startButton, pauseButton, speedLabel, faster, slower);
+        buttons.getChildren().addAll(startButton, pauseButton, speedLabel, speedLabel2, faster, slower);
         simulationPane.setLeft(buttons);
 
         simulationTab.setContent(simulationPane);
@@ -211,7 +210,6 @@ public class Gui extends Application {
 
 
         roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
-
 
         // --- ------- ---
 
@@ -231,39 +229,48 @@ public class Gui extends Application {
         primaryStage.show();
     }
 
-    private void newSpeed(double speed, Label speedLabel) {
+    private void newSpeed(Label speedLabel) {
+        double speed;
         switch (index) {
             case -2:
                 speed = 0.1;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case -1:
                 speed = 0.5;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 0:
                 speed = 1.0;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 1:
                 speed = 1.5;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 2:
                 speed = 2.0;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 3:
                 speed = 5.0;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 4:
                 speed = 10.0;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 5:
                 speed = 20.0;
-                speedLabel.setText("Speed: " + speed);
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
         }
     }
@@ -293,31 +300,6 @@ public class Gui extends Application {
         Label groupLineEdit = new Label("----------");
         vBoxGroupEdit.getChildren().add(groupLabelEdit);
         vBoxGroupEdit.getChildren().add(groupLineEdit);
-    }
-
-    private ArrayList<String[]> arraySort(ArrayList<String[]> data) {
-        ArrayList<String> howToSort = new ArrayList<>();
-        ArrayList<String[]> sortedData = new ArrayList<>();
-        for (int i = 5; i < data.size(); i++) {
-            howToSort.add(data.get(i)[0] + "@" + i);
-//            System.out.println(data.get(i)[0] + "@" + i); // debug code
-        }
-        Collections.sort(howToSort);
-        for (int i = 0; i < 5; i++) {
-            sortedData.add(data.get(i));
-        }
-        for (int i = 0; i < howToSort.size(); i++) {
-            sortedData.add(data.get(Integer.parseInt(howToSort.get(i).split("@", 0)[1])));
-        }
-//        // debug code
-//        for (int i = 0; i < sortedData.size(); i++) {
-//            for (int j = 0; j < sortedData.get(i).length; j++) {
-//                System.out.println(sortedData.get(i)[j]);
-//            }
-//            System.out.println();
-//        }
-
-        return sortedData;
     }
 
     private void refresh() {

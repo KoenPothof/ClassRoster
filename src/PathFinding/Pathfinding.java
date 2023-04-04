@@ -100,7 +100,7 @@ public class Pathfinding {
                     ));
 
                     if (pathfindingTiles[i][j].getTargetTileX() == i && pathfindingTiles[i][j].getTargetTileY() == j) {
-                        g2d.setColor(Color.GREEN);
+                        g2d.setColor(Color.RED);
                         g2d.fill(new Rectangle2D.Double(16 * i, 16 * j, 16, 16));
                     }
                 }

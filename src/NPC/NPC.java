@@ -37,9 +37,11 @@ public class NPC {
         this.targetX = this.positionX;
         this.targetY = this.positionY;
         this.notAFinalName = new NotAFinalName();
-        image = notAFinalName.getCurrentImage();
+        this.image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
     }
+
+
 
     public NPC(int x, int y) {
         this.positionX = x * tileWidth - tileOffset;
@@ -53,14 +55,15 @@ public class NPC {
 
     public void draw(Graphics2D g) {
         AffineTransform tx = new AffineTransform();
+        this.image = notAFinalName.getCurrentImage();
 
         tx.translate(positionX, positionY);
         tx.scale(1.5, 2.3);
         tx.translate(-image.getWidth() / 2d, -image.getHeight() / 1.2d);
-
         g.drawImage(image, tx, null);
-        g.setColor(Color.ORANGE);
-        g.draw(new Ellipse2D.Double(positionX - 10, positionY - 10, 20, 20));
+
+//        g.setColor(Color.ORANGE);
+//        g.draw(new Ellipse2D.Double(positionX - 10, positionY - 10, 20, 20));
 
     }
 

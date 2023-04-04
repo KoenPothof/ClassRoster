@@ -1,17 +1,17 @@
 package PathFinding;
 
 public class PathfindingTile {
-    private int tileX;
-    private int tileY;
-    private int targetTileX;
-    private int targetTileY;
-    private int distance;
+    private final int tileX;
+    private final int tileY;
+    private final int targetTileX;
+    private final int targetTileY;
+    private final int distance;
 
     public PathfindingTile(int tileX, int tileY) {
         this.tileX = tileX;
         this.tileY = tileY;
-        this.targetTileY = tileY;
         this.targetTileX = tileX;
+        this.targetTileY = tileY;
         this.distance = 1;
     }
 
