@@ -1,5 +1,6 @@
 package NPC;
 
+import Data.Group;
 import PathFinding.Pathfinding;
 
 import java.awt.*;
@@ -24,13 +25,15 @@ public class NPC {
     private BufferedImage image;
     private NotAFinalName notAFinalName;
     private Pathfinding pathfinding;
+    private String group;
 
     // note ons poppetje mag alleen maar 90 graden hoeken draaien dus goed invoegen bij de mapping
 
 
-    public NPC() {
+    public NPC(String group) {
+        this.group = group;
         this.positionX = 55 * tileWidth - tileOffset;
-        this.positionY = 4 * tileWidth - tileOffset;
+        this.positionY = 8 * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
         this.notAFinalName = new NotAFinalName();
@@ -76,7 +79,7 @@ public class NPC {
         this.pathfinding = pathfinding;
     }
 
-    // plek van popetje
+    // plek van poppetje
     public int[] getPosition() {
         int[] position = new int[2];
         position[0] = (int) (positionX / tileWidth);
@@ -98,4 +101,6 @@ public class NPC {
     public Pathfinding getPathfinding() {
         return pathfinding;
     }
+
+    public String getGroup(){return group;}
 }

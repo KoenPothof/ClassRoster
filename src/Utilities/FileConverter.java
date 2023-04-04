@@ -129,7 +129,7 @@ public class FileConverter {
             list.add(data);
             for (int i = 0; i < data.length; i++) {
                 String datum = data[i];
-                classrooms[i] = new Classroom(datum);
+                classrooms[i] = new Classroom(datum, jsonReader.getObjectX()[i],jsonReader.getObjectY()[i],jsonReader.getObjectWidth()[i],jsonReader.getObjectHeight()[i]);
                 dataHashMap.put(datum, i);
 //                System.out.println("Loaded: " + datum); // debug code
             }

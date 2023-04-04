@@ -24,6 +24,8 @@ public class Gui extends Application {
 
     private final FileConverter fileConverter = new FileConverter("data.txt");
 
+    private GuiCanvas guiCanvas;
+
     private final ArrayList<ComboBox<String>> comboBoxArrayList = new ArrayList<>();
     private final ArrayList<Label> labelArrayList = new ArrayList<>();
     private final ArrayList<Button> deleteButtonsArrayList = new ArrayList<>();
@@ -122,7 +124,7 @@ public class Gui extends Application {
         editBorderPane.setCenter(hBoxEdit);
 
         BorderPane simulationPane = new BorderPane();
-        GuiCanvas guiCanvas = new GuiCanvas(simulationPane, fileConverter);
+        guiCanvas = new GuiCanvas(simulationPane, fileConverter);
 
         // --- ----------- ---
 
@@ -378,6 +380,7 @@ public class Gui extends Application {
     @Override
     public void stop() {
 //        System.out.println("\n closing application"); // debug code
+        guiCanvas.getTimer().cancel();
         fileConverter.save();
     }
 

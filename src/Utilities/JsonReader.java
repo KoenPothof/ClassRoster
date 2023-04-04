@@ -110,6 +110,14 @@ public class JsonReader {
         return dataArray;
     } // Array met getallen van de map.
 
+    public int[] getDataArrayInt() {
+        int[] data = new int[dataArray.size()];
+        for (int i = 0; i < dataArray.size(); i++) {
+            data[i] = dataArray.getInt(i);
+        }
+        return data;
+    }
+
     public int getMapWidth() {
         return mapWidth;
     }

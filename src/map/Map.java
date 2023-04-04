@@ -44,8 +44,8 @@ public class Map {
         this.jsonReader = new JsonReader();
         JsonArray layerArray = this.jsonReader.getLayerArray();
 
-        mapWidth = jsonReader.getMapWidth();
-        mapHeight = jsonReader.getMapHeight();
+        this.mapWidth = jsonReader.getMapWidth();
+        this.mapHeight = jsonReader.getMapHeight();
 
 
 // uitlezen images en het snijden daarvan
@@ -78,8 +78,9 @@ public class Map {
 
 // leest alle data uit om de map te tekenen.
         for (int i = 0; i < layerArray.size(); i++) {
-            if (i == 1)
+            if (i != 3) {
                 continue;
+            }
             JsonObject layer = layerArray.getJsonObject(i);
             int[] data = new int[layer.getJsonArray("data").size()];
             for (int j = 0; j < data.length; j++) {
@@ -106,11 +107,26 @@ public class Map {
             for (int y = 0; y < mapHeight; y++) {
                 int index = x + mapWidth * y;
                 int tileId = data[index];
-                if (tileId <= 0)
+                if (tileId <= 0) {
                     continue;
-                BufferedImage tileImage = getSlicedImage(tileId - 1);
-                Image deWerkendeImage = SwingFXUtils.toFXImage(tileImage, null);
-                gc.drawImage(deWerkendeImage, 16 * x, 16 * y);
+                }
+                gc.drawImage(SwingFXUtils.toFXImage(getSlicedImage(tileId - 1), null), 16 * x, 16 * y);
+            }
+        }
+
+         layer = layerArray.getJsonObject(3);
+         data = new int[layer.getJsonArray("data").size()];
+        for (int j = 0; j < data.length; j++) {
+            data[j] = layer.getJsonArray("data").getInt(j);
+        }
+        for (int x = 0; x < mapWidth; x++) {
+            for (int y = 0; y < mapHeight; y++) {
+                int index = x + mapWidth * y;
+                int tileId = data[index];
+                if (tileId <= 0) {
+                    continue;
+                }
+                gc.drawImage(SwingFXUtils.toFXImage(getSlicedImage(tileId - 1), null), 16 * x, 16 * y);
             }
         }
 
@@ -129,11 +145,10 @@ public class Map {
     }
 
     public void draw(FXGraphics2D g2d) {
-
+    g2d.drawImage(screenshot, 0, 0, null);
 //        for (Layer layer : layers) {
 //            layer.draw(g2d, this);
 //        }
-        g2d.drawImage(screenshot, 0, 0, null);
 
 
     }

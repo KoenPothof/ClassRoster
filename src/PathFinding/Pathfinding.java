@@ -22,41 +22,6 @@ public class Pathfinding {
     private Utilities.JsonReader jsonReader;
 
 
-//    public Pathfinding() {
-//        this.jsonReader = new Utilities.JsonReader("Walls");
-//
-//        int mapWidth = jsonReader.getMapWidth();
-//        int mapHeight = jsonReader.getMapHeight();
-//
-//        data = new int[mapWidth][mapHeight];
-//        int count = 0;
-//        for (int y = 0; y < mapHeight; y++) {
-//            for (int x = 0; x < mapWidth; x++) {
-//                data[x][y] = jsonReader.getDataArray().getInt(count);
-//                count++;
-//            }
-//        }
-//        pathfindingTiles = new PathfindingTile[data.length][data[0].length];
-//
-//        queue.clear();
-//        pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
-//        queue.add(new PathfindingTile(targetX, targetY));
-//        data[targetX][targetY] = 1;
-//        while (!queue.isEmpty()) {
-//            PathfindingTile currentTile = queue.remove();
-//            int x = currentTile.getTileX();
-//            int y = currentTile.getTileY();
-//            int[][] neighbours = currentTile.getNeighbours();
-//            for (int i = 0; i < neighbours.length; i++) {
-//                if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
-//                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
-//                    queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
-//                    data[neighbours[i][0]][neighbours[i][1]] = data[x][y] + 1;
-//                }
-//            }
-//        }
-//    }
-
     public Pathfinding(int targetX, int targetY) {
         JsonReader reader = null;
         try {
@@ -88,7 +53,8 @@ public class Pathfinding {
             PathfindingTile currentTile = queue.remove();
             int x = currentTile.getTileX();
             int y = currentTile.getTileY();
-            int[][] neighbours = currentTile.getNeighbours();
+            int alpha[] = getNextTile(x, y);
+            int[][] neighbours = currentTile.getNeighbours(alpha);
             for (int i = 0; i < neighbours.length; i++) {
                 if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
                     pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
@@ -98,6 +64,8 @@ public class Pathfinding {
             }
         }
     }
+
+
 
 
     public void dataCheck(int[][] data) {

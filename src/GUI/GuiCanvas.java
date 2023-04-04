@@ -15,6 +15,8 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class GuiCanvas {
 
@@ -23,43 +25,26 @@ public class GuiCanvas {
     private Map map;
     private Pathfinding pathfinding;
     private ResizableCanvas canvas;
+    private Timer timer;
+    private TimerTask task;
+
     private FileConverter fileConverter;
-    private ArrayList<NPC> npcs = new ArrayList<>();
 
     private NPCConsole npcConsole;
 
-    Point2D clipPosition = new Point2D.Double(50 * 16, 50 * 16);
+    private int counter = 0;
+    private final long timerTime = 10000; // 1000 = 1 second
 
     public GuiCanvas(BorderPane borderPanePane, FileConverter fileConverter) throws IOException {
         map = new Map("map/project.json");
-        pathfinding = new Pathfinding(50, 50);
+        pathfinding = new Pathfinding(64,47);
         canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         borderPanePane.setCenter(canvas);
         this.fileConverter = fileConverter;
 
-//        NPC npc = new NPC(12, 10);
-//        NPC npc2 = new NPC(11, 10);
-//        Group group1 = new Group();
-
-
-        for (int i = 0; i < fileConverter.getGroups().length; i++) {
-            for (int j = 0; j < fileConverter.getGroups()[i].getNPCs().length; j++) {
-                npcs.add(fileConverter.getGroups()[i].getNPCs()[j]);
-            }
-        }
-//        npcs.add(npc);
-//        npcs.add(npc2);
-
-//        canvas.setOnMouseClicked(e -> {
-//            clipPosition = new Point2D.Double(e.getX(), e.getY());
-//            pathfinding.findPath((int) e.getX() / 16, (int) e.getY() / 16);
-//            draw(g2d);
-//        });
-//        pathfinding.findPath(14, 14);
-
-        npcConsole = new NPCConsole(npcs, fileConverter);
+        npcConsole = new NPCConsole(fileConverter);
         new AnimationTimer() {
             long last = -1;
 
@@ -69,7 +54,7 @@ public class GuiCanvas {
                     if (simulationOn) {
                         if (last == -1)
                             last = now;
-                        update((now - last) / 1.0);
+                        update((now - last) / 1000.0);
                         last = now;
                         draw(g2d);
                     }
@@ -80,6 +65,16 @@ public class GuiCanvas {
             }
         }.start();
 
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                npcConsole.pathfindingUpdate();
+                counter++;
+            }
+        };
+        timer.schedule(task, 0, timerTime);
+
         draw(g2d);
     }
 
@@ -87,10 +82,9 @@ public class GuiCanvas {
         g2d.setBackground(Color.white);
         g2d.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
         map.draw(g2d);
-        for (NPC npc : npcs)
-            npc.draw(g2d);
+        npcConsole.draw(g2d);
 
-        pathfinding.draw(g2d);
+//        pathfinding.draw(g2d);
 //        pathfinding.numberDraw(g2d);
     }
 
@@ -100,5 +94,14 @@ public class GuiCanvas {
 
     public void setSimulationOn(boolean simulationOn) {
         this.simulationOn = simulationOn;
+    }
+
+    public void setTimerTime(double time) {
+        counter--;
+        timer.schedule(task, 0, (long) (timerTime * time));
+    }
+
+    public Timer getTimer() {
+        return timer;
     }
 }
