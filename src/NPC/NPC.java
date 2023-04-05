@@ -1,15 +1,10 @@
 package NPC;
 
-import Data.Group;
 import PathFinding.Pathfinding;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
 public class NPC {
     double positionX;
@@ -23,7 +18,7 @@ public class NPC {
 
 
     private BufferedImage image;
-    private NotAFinalName notAFinalName;
+    private SpriteDirection notAFinalName;
     private Pathfinding pathfinding;
     private String group;
 
@@ -36,7 +31,7 @@ public class NPC {
         this.positionY = 8 * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
-        this.notAFinalName = new NotAFinalName();
+        this.notAFinalName = new SpriteDirection();
         this.image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
     }
@@ -48,7 +43,7 @@ public class NPC {
         this.positionY = y * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
-        this.notAFinalName = new NotAFinalName();
+        this.notAFinalName = new SpriteDirection();
         image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
     }
@@ -97,7 +92,7 @@ public class NPC {
         return position;
     }
 
-    public NotAFinalName getNotAFinalName() {
+    public SpriteDirection getNotAFinalName() {
         return notAFinalName;
     }
 

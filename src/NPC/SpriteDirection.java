@@ -7,13 +7,13 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class NotAFinalName {
+public class SpriteDirection {
 
     private BufferedImage image;
     private BufferedImage images[] = new BufferedImage[16];
     private WalkingDirection direction = WalkingDirection.DOWN;
 
-    public NotAFinalName() {
+    public SpriteDirection() {
         try {
             image = ImageIO.read(getClass().getResource("/npc/sprite.png"));
             for (int i = 0; i < 16; i++) {
