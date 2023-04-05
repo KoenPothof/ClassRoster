@@ -97,6 +97,7 @@ public class Pathfinding {
                             pathfindingTiles[i][j].getTileY() * 16 + 8,
                             pathfindingTiles[i][j].getTargetTileX() * 16 + 8,
                             pathfindingTiles[i][j].getTargetTileY() * 16 + 8
+
                     ));
 
                     if (pathfindingTiles[i][j].getTargetTileX() == i && pathfindingTiles[i][j].getTargetTileY() == j) {
