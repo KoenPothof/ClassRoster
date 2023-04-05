@@ -156,31 +156,45 @@ public class Gui extends Application {
         Tab simulationTab = new Tab("simulatie");
 
         BufferedImage buttonImages = ImageIO.read(getClass().getResource("/gui_resources/buttons.png"));
-        BufferedImage pauseImage = buttonImages.getSubimage(0, 0, 30, 25);
-        BufferedImage startImage = buttonImages.getSubimage(32, 0, 30, 25);
 
+
+        BufferedImage startImage = buttonImages.getSubimage(26, 0, 26, 25);
         Image startImage1 = SwingFXUtils.toFXImage(startImage, null);
         ImageView startView = new ImageView(startImage1);
-        Image pauseImage1 = SwingFXUtils.toFXImage(pauseImage, null);
-        ImageView pauseView = new ImageView(pauseImage1);
-
         Button startButton = new Button();
         startButton.setGraphic(startView);
+        startButton.setWrapText(true);
+        startButton.setMaxWidth(20);
+        startButton.setOnAction(event -> {
+            guiCanvas.setSimulationOn(true);
+        });
+
+        BufferedImage pauseImage = buttonImages.getSubimage(0, 0, 26, 25);
+        Image pauseImage1 = SwingFXUtils.toFXImage(pauseImage, null);
+        ImageView pauseView = new ImageView(pauseImage1);
         Button pauseButton = new Button();
         pauseButton.setGraphic(pauseView);
-        startButton.setWrapText(true);
         pauseButton.setWrapText(true);
-        startButton.setMaxWidth(20);
         pauseButton.setMaxWidth(20);
+        pauseButton.setOnAction(event -> {
+            guiCanvas.setSimulationOn(false);
+        });
 
-
+        BufferedImage resetImage = buttonImages.getSubimage(52, 0, 26, 25);
+        Image resetImage1 = SwingFXUtils.toFXImage(resetImage, null);
+        ImageView resetView = new ImageView(resetImage1);
+        Button resetButton = new Button();
+        resetButton.setGraphic(resetView);
+        resetButton.setWrapText(true);
+        resetButton.setMaxWidth(20);
+        resetButton.setOnAction(event -> {
+            guiCanvas.setNpcConsole(new NPCConsole(fileConverter));
+        });
 
         Label speedLabel = new Label("Speed: ");
-        Label speedLabel2 = new Label( "1.0");
+        Label speedLabel2 = new Label("1.0");
+
         Button slower = new Button("Slower");
-        Button faster = new Button("Faster");
-
-
         slower.setOnAction(event -> {
             if (index != -2) {
                 index--;
@@ -188,6 +202,7 @@ public class Gui extends Application {
             newSpeed(speedLabel2);
         });
 
+        Button faster = new Button("Faster");
         faster.setOnAction(event -> {
             if (index != 5) {
                 index++;
@@ -196,18 +211,10 @@ public class Gui extends Application {
         });
 
         VBox buttons = new VBox();
-        buttons.getChildren().addAll(startButton, pauseButton, speedLabel, speedLabel2, faster, slower);
+        buttons.getChildren().addAll(startButton, pauseButton, resetButton, speedLabel, speedLabel2, faster, slower);
         simulationPane.setLeft(buttons);
 
         simulationTab.setContent(simulationPane);
-
-        startButton.setOnAction(event -> {
-            guiCanvas.setSimulationOn(true);
-        });
-
-        pauseButton.setOnAction(event -> {
-            guiCanvas.setSimulationOn(false);
-        });
 
 
         roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
@@ -417,42 +424,51 @@ public class Gui extends Application {
             for (int i = 0; i < addCheck.length; i++) {
                 alpha = alpha + addCheck[i];
             }
-            boolean hasDuplicates = false;
-
-            for (int i = 0; i < fileConverter.getLessons().size() - 1; i++) {
-                String currentTime = fileConverter.getTimes()[i].toString();
-                for (int j = i + 1; j < fileConverter.getGroups().length; j++) {
-                    if (fileConverter.getLessons().get(j).getTime().toString().equals(currentTime)) {
-                        hasDuplicates = true;
-                        break;
-                    }
-                }
-                if (hasDuplicates) {
-                    break;
-                }
+            String[] beta = {"", "", "", "", ""};
+            for (int j = 0; j < addComboBoxesArrayList.size(); j++) {
+                beta[j] = addComboBoxesArrayList.get(j).getValue();
             }
-            if(hasDuplicates){
-                new Alert(Alert.AlertType.NONE, "Er zijn te veel groepen in deze les!", ButtonType.OK).show();
-            } else if(hasDuplicates==false) {
-                if (alpha == 5) {
-                    String[] beta = {"", "", "", "", ""};
-                    for (int j = 0; j < addComboBoxesArrayList.size(); j++) {
-                        beta[j] = addComboBoxesArrayList.get(j).getValue();
+            boolean hasDuplicates = false;
+            String currentTime = beta[0];
+            for (int i = 0; i < fileConverter.getLessons().size(); i++) {
+                    if (fileConverter.getLessons().get(i).getTime().toString().equals(currentTime)) {
+                        if (fileConverter.getLessons().get(i).getGroup().toString().equals(beta[4])) {
+                            hasDuplicates = true;
+                            break;
+                        } else if (fileConverter.getLessons().get(i).getClassroom().toString().equals(beta[3])) {
+                            hasDuplicates = true;
+                            break;
+                        } else if (fileConverter.getLessons().get(i).getTeacher().toString().equals(beta[2])) {
+                            hasDuplicates = true;
+                            break;
+                        } else if (fileConverter.getLessons().get(i).getSubject().toString().equals(beta[1])) {
+                            hasDuplicates = true;
+                            break;
+                        }
                     }
-                    fileConverter.getLessons().add(new Lesson(
-                            fileConverter.getTimes()[fileConverter.getDataHashMap().get(beta[0])],
-                            fileConverter.getSubjects()[fileConverter.getDataHashMap().get(beta[1])],
-                            fileConverter.getTeachers()[fileConverter.getDataHashMap().get(beta[2])],
-                            fileConverter.getClassrooms()[fileConverter.getDataHashMap().get(beta[3])],
-                            fileConverter.getGroups()[fileConverter.getDataHashMap().get(beta[4])]
-                    ));
-                    comboBoxesAdd();
-                    labelsAdd();
-                    refresh();
-                    for (int j = 0; j < addCheck.length; j++) {
-                        addCheck[j] = 0;
-                        addComboBoxesArrayList.get(j).setValue("");
-                    }
+
+            }
+            if (hasDuplicates) {
+                new Alert(Alert.AlertType.NONE, "Er zijn duplicates!", ButtonType.OK).show();
+            } else if (!hasDuplicates && alpha == 5) {
+//                    String[] beta = {"", "", "", "", ""};
+//                    for (int j = 0; j < addComboBoxesArrayList.size(); j++) {
+//                        beta[j] = addComboBoxesArrayList.get(j).getValue();
+//                    }
+                fileConverter.getLessons().add(new Lesson(
+                        fileConverter.getTimes()[fileConverter.getDataHashMap().get(beta[0])],
+                        fileConverter.getSubjects()[fileConverter.getDataHashMap().get(beta[1])],
+                        fileConverter.getTeachers()[fileConverter.getDataHashMap().get(beta[2])],
+                        fileConverter.getClassrooms()[fileConverter.getDataHashMap().get(beta[3])],
+                        fileConverter.getGroups()[fileConverter.getDataHashMap().get(beta[4])]
+                ));
+                comboBoxesAdd();
+                labelsAdd();
+                refresh();
+                for (int j = 0; j < addCheck.length; j++) {
+                    addCheck[j] = 0;
+                    addComboBoxesArrayList.get(j).setValue("");
+
                 }
             }
         });

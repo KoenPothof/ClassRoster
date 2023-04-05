@@ -2,10 +2,6 @@ package Data.Rooms;
 
 import NPC.WalkingDirections;
 import PathFinding.Pathfinding;
-import org.jfree.fx.FXGraphics2D;
-
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 public class Room {
     private String room;
@@ -26,7 +22,7 @@ public class Room {
 
         switch (roomType) {
             case CLASSROOM:
-                teacherPathfinding = new Pathfinding(x + 4, y - 2, WalkingDirections.DOWN);
+                teacherPathfinding = new Pathfinding(x , y , WalkingDirections.DOWN);
                 pathfindings = new Pathfinding[this.width * this.height];
                 for (int i = 0; i < this.height / 2; i++) {
                     pathfindings[i * 4] = new Pathfinding(x, y + i * 2 + 1, WalkingDirections.UP);
@@ -56,12 +52,12 @@ public class Room {
                 break;
             case TEACHERROOM:
                 pathfindings = new Pathfinding[6];
-                pathfindings[0] = new Pathfinding(x + 1, y + 1, WalkingDirections.RIGHT);
-                pathfindings[1] = new Pathfinding(x + 1, y + 4, WalkingDirections.RIGHT);
-                pathfindings[2] = new Pathfinding(x + 5, y - 1, WalkingDirections.UP);
-                pathfindings[3] = new Pathfinding(x + 7, y - 1, WalkingDirections.UP);
-                pathfindings[4] = new Pathfinding(x + 5, y - 4, WalkingDirections.DOWN);
-                pathfindings[5] = new Pathfinding(x + 7, y - 4, WalkingDirections.DOWN);
+                pathfindings[0] = new Pathfinding(x, y + 2, WalkingDirections.RIGHT);
+                pathfindings[1] = new Pathfinding(x, y + 5, WalkingDirections.RIGHT);
+                pathfindings[2] = new Pathfinding(x + 4, y - 1, WalkingDirections.UP);
+                pathfindings[3] = new Pathfinding(x + 6, y - 1, WalkingDirections.UP);
+                pathfindings[4] = new Pathfinding(x + 4, y - 4, WalkingDirections.DOWN);
+                pathfindings[5] = new Pathfinding(x + 6, y - 4, WalkingDirections.DOWN);
                 break;
         }
 

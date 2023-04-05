@@ -71,8 +71,6 @@ public class Map {
         }
 
 
-// ______________________________________________________________________________________________________________________________________________________________________________________________
-
         // create a new canvas with the same size as the screenshot
         JsonObject layer = layerArray.getJsonObject(2);
         int[] data = new int[layer.getJsonArray("data").size()];
@@ -114,13 +112,9 @@ public class Map {
         SnapshotParameters parameters = new SnapshotParameters();
         WritableImage snapshot = canvas.snapshot(parameters, null);
 
-        File output = new File("HetWerktAAAAAAAAAAAA.png");
+        File output = new File("TiledBackgroundScreenshot.png");
         ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", output);
-        screenshot = ImageIO.read(new FileInputStream("HetWerktAAAAAAAAAAAA.png"));
-
-// ____________________________________________________________________________________________________________________________________________________________________________________________
-
-
+        screenshot = ImageIO.read(new FileInputStream("TiledBackgroundScreenshot.png"));
 
     }
 

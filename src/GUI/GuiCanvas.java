@@ -1,25 +1,17 @@
 package GUI;
 
-import Data.Group;
-import NPC.NPC;
 import NPC.NPCConsole;
-import PathFinding.Pathfinding;
 import Utilities.FileConverter;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import map.Map;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -28,26 +20,21 @@ public class GuiCanvas {
     private boolean simulationOn = false;
 
     private Map map;
-    private Pathfinding pathfinding;
     private ResizableCanvas canvas;
     private Timer timer;
     private TimerTask task;
 
-    private FileConverter fileConverter;
-
     private NPCConsole npcConsole;
 
-    private int counter = 480;
+    private int counter;
     private final long timerTime = 1000; // 1000 = 1 second
 
     public GuiCanvas(BorderPane borderPanePane, FileConverter fileConverter) throws IOException {
         map = new Map("map/project.json");
-//        pathfinding = new Pathfinding(15, 20);
         canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
         borderPanePane.setCenter(canvas);
-        this.fileConverter = fileConverter;
 
         npcConsole = new NPCConsole(fileConverter);
         new AnimationTimer() {
@@ -70,12 +57,12 @@ public class GuiCanvas {
             }
         }.start();
 
-        newTimer(1);
+        newTimer(1, true);
 
         draw(g2d);
     }
 
-    String text = "Test Test";
+    String text = "press the start button";
 
     public void draw(FXGraphics2D g2d) {
         g2d.setBackground(Color.white);
@@ -88,8 +75,8 @@ public class GuiCanvas {
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         gc.setStroke(javafx.scene.paint.Paint.valueOf("white"));
-        gc.setFont(new Font("Arial", 34));
-        gc.strokeText(text, 1580, 100);
+        gc.setFont(new Font("Arial", 28));
+        gc.strokeText(text, 1580, 90);
 
 //        pathfinding.numberDraw(g2d);
     }
@@ -98,7 +85,10 @@ public class GuiCanvas {
         npcConsole.update();
     }
 
-    private void newTimer(double time) {
+    private void newTimer(double time, boolean reset) {
+        if (reset) {
+            counter = 450;
+        }
         try {
             timer.cancel();
         } catch (Exception ignored) {
@@ -119,6 +109,9 @@ public class GuiCanvas {
                     } else {
                         text = String.format("%d:%02d", hours, minutes);
                     }
+//                    for (int i = 0; i < npcConsole.getNpcs().size() * counter/480; i++) {
+//                        npcConsole.getNpcs().get(i).setDrawn(true);
+//                    }
 
                     if (text.equals("08:20")) {
                         npcConsole.pathfindingUpdate(0);
@@ -156,7 +149,12 @@ public class GuiCanvas {
 
     public void setTimerTime(double time) {
         counter--;
-        newTimer(time);
+        newTimer(time, false);
+    }
+
+    public void setNpcConsole(NPCConsole npcConsole) {
+        this.npcConsole = npcConsole;
+        newTimer(1, true);
     }
 
     public Timer getTimer() {

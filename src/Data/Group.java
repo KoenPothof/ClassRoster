@@ -1,7 +1,5 @@
 package Data;
 
-import NPC.NPC;
-
 public class Group {
 
     private String group;

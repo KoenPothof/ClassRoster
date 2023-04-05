@@ -67,7 +67,7 @@ public class NPCConsole {
         npcs = npcSort(npcs);
         for (NPC npc : npcs) {
 
-            if (!npc.isMoving()) {
+            if (!npc.moving || !npc.drawn) {
                 continue;
             }
 
@@ -86,13 +86,13 @@ public class NPCConsole {
 //            System.out.println(degreesTo);
 
             if (degreesTo > 60 && degreesTo <= 120) {
-                npc.getWalkingDirectionController().setDirection(WalkingDirections.UP);
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.UP, true);
             } else if (degreesTo > 120 && degreesTo <= 240) {
-                npc.getWalkingDirectionController().setDirection(WalkingDirections.RIGHT);
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.RIGHT, true);
             } else if (degreesTo > 240 && degreesTo <= 300) {
-                npc.getWalkingDirectionController().setDirection(WalkingDirections.DOWN);
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.DOWN, true);
             } else if (degreesTo > 300 || degreesTo <= 60) {
-                npc.getWalkingDirectionController().setDirection(WalkingDirections.LEFT);
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.LEFT, true);
             }
             npc.getWalkingDirectionController().update();
 
@@ -113,13 +113,13 @@ public class NPCConsole {
 
 
             for (NPC otherNPC : npcs) {
-                if (otherNPC == npc) {
+                if (otherNPC == npc || !otherNPC.drawn) {
                     continue;
                 }
                 Point2D otherNpcPosition = new Point2D.Double(otherNPC.positionX, otherNPC.positionY);
-                if (otherNpcPosition.distanceSq(new Point2D.Double(npc.positionX, npc.positionY)) < 300) {
-                    npc.positionX = npc.positionX + (npc.positionX - otherNPC.positionX) * .05;
-                    npc.positionY = npc.positionY + (npc.positionY - otherNPC.positionY) * .05;
+                if (otherNpcPosition.distanceSq(new Point2D.Double(npc.positionX, npc.positionY)) < 280) {
+                    npc.positionX = npc.positionX + (npc.positionX - otherNPC.positionX) * .06;
+                    npc.positionY = npc.positionY + (npc.positionY - otherNPC.positionY) * .06;
                 }
 
             }
@@ -134,12 +134,12 @@ public class NPCConsole {
                 }
             }
 
-            if (npcX == nextTile[0] && npcY == nextTile[1] && npc.isMoving() == true) {
+            if (npcX == nextTile[0] && npcY == nextTile[1] && npc.moving) {
                 npc.positionX = npc.targetX + 8;
                 npc.positionY = npc.targetY - 2;
-                npc.getWalkingDirectionController().setDirection(npc.getPathfinding().getWalkingDirection());
+                npc.getWalkingDirectionController().setDirection(npc.getPathfinding().getWalkingDirection(), false);
 //                npc.getWalkingDirectionController().update();
-                npc.setMoving(false);
+                npc.moving = false;
 //                npc.getWalkingDirectionController().setDirection(WalkingDirections.UP);
             }
 
@@ -151,30 +151,29 @@ public class NPCConsole {
         System.out.println("pathfinding update");
         for (NPC npc : npcs) {
             npc.setPathfinding(null);
-            npc.setMoving(true);
+            npc.moving = true;
         }
         int cafeteriaCounter = 0;
         int teacherCounter = 0;
         String currentTime = fileConverter.getTimes()[time].toString();
         for (int j = 0; j < fileConverter.getLessons().size(); j++) {
             if (fileConverter.getLessons().get(j).getTime().toString().equals(currentTime)) {
-                for (int k = 0; k < npcsByGroup.size(); k++) {
+                for (int k = 0; k < npcsByGroup.size()-1; k++) {
                     if (npcsByGroup.get(k)[0].getGroup().equals(fileConverter.getLessons().get(j).getGroup().toString()) && npcsByGroup.get(k)[0].getPathfinding() == null) {
                         for (int l = 0; l < npcsByGroup.get(k).length; l++) {
                             npcsByGroup.get(k)[l].setPathfinding(fileConverter.getLessons().get(j).getClassroom().getPathfindings()[l]);
                         }
-                    } else if (npcsByGroup.get(k)[0].getGroup().equals("teacher")) {
-                        for (int i = 0; i < npcsByGroup.get(k).length; i++) {
-                            if (npcsByGroup.get(k)[i].getPathfinding() == null) {
-                                npcsByGroup.get(k)[i].setPathfinding(fileConverter.getLessons().get(j).getClassroom().getTeacherPathfinding());
-                                break;
-                            }
-                        }
+                    }
+                }
+                for (int i = 0; i < npcsByGroup.get(npcsByGroup.size() - 1).length; i++) {
+                    if (npcsByGroup.get(npcsByGroup.size()-1)[i].getPathfinding() == null) {
+                        npcsByGroup.get(npcsByGroup.size()-1)[i].setPathfinding(fileConverter.getLessons().get(j).getClassroom().getTeacherPathfinding());
+                        break;
                     }
                 }
             }
         }
-        for (int i = 0; i < npcsByGroup.size(); i++) {
+        for (int i = 0; i < npcsByGroup.size()-1; i++) {
             if (npcsByGroup.get(i)[0].getPathfinding() == null) {
                 for (int j = 0; j < npcsByGroup.get(i).length; j++) {
                     npcsByGroup.get(i)[j].setPathfinding(cafeteria.getPathfindings()[cafeteriaCounter]);
@@ -196,7 +195,7 @@ public class NPCConsole {
         int teacherCounter = 0;
         for (NPC npc : npcs) {
             npc.setPathfinding(null);
-            npc.setMoving(true);
+            npc.moving = true;
             if (npc.group.equals("teacher")) {
                 // nog te doen
                 npc.setPathfinding(teacherRoom.getPathfindings()[teacherCounter]);
@@ -215,7 +214,12 @@ public class NPCConsole {
         }
     }
 
+    public ArrayList<NPC> getNpcs() {
+        return npcs;
+    }
+
     public void setSpeed(double speed) {
         this.speed = speed;
     }
+
 }

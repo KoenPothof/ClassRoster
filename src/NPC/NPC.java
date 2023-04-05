@@ -12,7 +12,8 @@ public class NPC {
     double positionY;
     double targetX;
     double targetY;
-    boolean moving = true;
+    boolean moving;
+    boolean drawn;
 
     private final int tileWidth = 16;
     private final int tileOffset = 8;
@@ -28,40 +29,44 @@ public class NPC {
 
     public NPC(String group) {
         this.group = group;
-        this.positionX = 53 * tileWidth - tileOffset;
-        this.positionY = 8 * tileWidth - tileOffset;
+        this.positionX = 53 * tileWidth - tileOffset + Math.random() - 0.5;
+        this.positionY = 4 * tileWidth - tileOffset + Math.random() - 0.5;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
         this.notAFinalName = new WalkingDirectionController("sprite.png");
         this.image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
+        this.moving = false;
+        this.drawn = true;
     }
-
 
 
     public NPC() {
         this.group = "teacher";
-        this.positionX = 55 * tileWidth - tileOffset;
-        this.positionY = 8 * tileWidth - tileOffset;
+        this.positionX = 53 * tileWidth - tileOffset + Math.random() - 0.5;
+        this.positionY = 4 * tileWidth - tileOffset + Math.random() - 0.5;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
         this.notAFinalName = new WalkingDirectionController("sprite2.png");
         this.image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
+        this.moving = false;
+        this.drawn = true;
     }
 
     public void draw(Graphics2D g) {
-        AffineTransform tx = new AffineTransform();
-        this.image = spriteDirection.getCurrentImage();
+        if (drawn) {
+            AffineTransform tx = new AffineTransform();
+            this.image = getWalkingDirectionController().getCurrentImage();
 
-        tx.translate(positionX, positionY);
-        tx.scale(1.3, 2.3);
-        tx.translate(-image.getWidth() / 2d, -image.getHeight() / 1.2d);
-        g.drawImage(image, tx, null);
+            tx.translate(positionX, positionY);
+            tx.scale(1.3, 2.3);
+            tx.translate(-image.getWidth() / 2d, -image.getHeight() / 1.2d);
+            g.drawImage(image, tx, null);
 
 //        g.setColor(Color.ORANGE);
 //        g.draw(new Ellipse2D.Double(positionX - 10, positionY - 10, 20, 20));
-
+        }
     }
 
     // plek waar je naar toe moet
@@ -76,10 +81,6 @@ public class NPC {
 //        this.targetX = x * tileWidth + tileOffset;
 //        this.targetY = y * tileWidth + tileOffset;
 //        this.target = new Point2D.Double(x * tileWidth - tileOffset, y * tileWidth - tileOffset);
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
     }
 
     public void setPathfinding(Pathfinding pathfinding) {
@@ -101,10 +102,6 @@ public class NPC {
         return position;
     }
 
-    public boolean isMoving() {
-        return moving;
-    }
-
     public WalkingDirectionController getWalkingDirectionController() {
         return notAFinalName;
     }
@@ -113,5 +110,11 @@ public class NPC {
         return pathfinding;
     }
 
-    public String getGroup(){return group;}
+    public String getGroup() {
+        return group;
+    }
+
+    public void setDrawn(boolean drawn) {
+        this.drawn = drawn;
+    }
 }

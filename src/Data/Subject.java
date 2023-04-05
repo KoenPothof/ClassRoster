@@ -1,7 +1,5 @@
 package Data;
 
-import Utilities.FileConverter;
-
 public class Subject {
     private String subject;
 

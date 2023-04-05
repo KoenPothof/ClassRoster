@@ -24,20 +24,22 @@ public class WalkingDirectionController {
         }
     }
 
-    public void setDirection(WalkingDirections direction) {
+    public void setDirection(WalkingDirections direction, boolean moving) {
         this.direction = direction;
+        if (!moving)
+            teller3 = 0;
         switch (direction) {
             case DOWN:
-                teller2 = 0;
+                teller2 = teller3;
                 break;
             case UP:
-                teller2 = 4;
+                teller2 = 4 + teller3;
                 break;
             case LEFT:
-                teller2 = 8;
+                teller2 = 8 + teller3;
                 break;
             case RIGHT:
-                teller2 = 12;
+                teller2 = 12 + teller3;
                 break;
         }
 
@@ -45,12 +47,16 @@ public class WalkingDirectionController {
 
     private int teller = 0;
     private int teller2 = 0;
+    private int teller3 = 0;
 
 
     public void update() {
         teller++;
         if (teller % 10 == 0){
             teller2++;
+            teller3++;
+            if (teller3 > 3)
+                teller3 = 0;
             switch (direction) {
                 case DOWN:
                     if (teller2 > 3)
@@ -69,6 +75,7 @@ public class WalkingDirectionController {
                         teller2 = 12;
                     break;
             }
+
         }
 
     }

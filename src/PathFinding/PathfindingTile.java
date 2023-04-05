@@ -24,7 +24,7 @@ public class PathfindingTile {
     }
 
     public int[][] getNeighbours(int[] data) {
-        PathfindingEnum direction = PathfindingEnum.NORTH;
+        PathfindingEnum direction = PathfindingEnum.EAST;
         if (tileX > data[0]) {
             direction = PathfindingEnum.EAST;
         } else if (tileX < data[0]) {
