@@ -1,11 +1,11 @@
 package PathFinding;
 
 import NPC.WalkingDirections;
+import Utilities.JsonReader;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -24,18 +24,11 @@ public class Pathfinding {
 
 
     public Pathfinding(int targetX, int targetY, WalkingDirections walkingDirection) {
-        JsonReader reader = null;
-        try {
-            reader = Json.createReader(new FileInputStream("resources/map/project.json"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JsonObject root = reader.readObject();
+        jsonReader = new JsonReader();
+        int mapWidth = jsonReader.getMapWidth();
+        int mapHeight = jsonReader.getMapHeight();
 
-        int mapWidth = root.getInt("width");
-        int mapHeight = root.getInt("height");
-
-        JsonObject layer = root.getJsonArray("layers").getJsonObject(0);
+        JsonObject layer = jsonReader.getLayerArray().getJsonObject(0);
         data = new int[mapWidth][mapHeight];
         int count = 0;
         for (int y = 0; y < mapHeight; y++) {
