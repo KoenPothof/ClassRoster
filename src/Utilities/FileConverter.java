@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class FileConverter {
 
     private String filename;
+    private JsonReader jsonReader;
     private Time[] times;
     private Subject[] subjects;
     private Teacher[] teachers;
@@ -26,6 +27,7 @@ public class FileConverter {
 
     public FileConverter(String filename) {
         this.filename = filename;
+        this.jsonReader = new JsonReader();
         loadData();
     }
 
@@ -127,7 +129,7 @@ public class FileConverter {
             list.add(data);
             for (int i = 0; i < data.length; i++) {
                 String datum = data[i];
-                classrooms[i] = new Classroom(datum);
+                classrooms[i] = new Classroom(datum, jsonReader.getObjectX()[i],jsonReader.getObjectY()[i],jsonReader.getObjectWidth()[i],jsonReader.getObjectHeight()[i]);
                 dataHashMap.put(datum, i);
 //                System.out.println("Loaded: " + datum); // debug code
             }
@@ -154,11 +156,12 @@ public class FileConverter {
                 ));
 
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
     }
 
     public Time[] getTimes() {
@@ -191,5 +194,9 @@ public class FileConverter {
 
     public ArrayList<String[]> getList() {
         return list;
+    }
+
+    public JsonReader getJsonReader() {
+        return jsonReader;
     }
 }

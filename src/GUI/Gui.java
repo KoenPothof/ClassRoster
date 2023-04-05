@@ -4,25 +4,30 @@ import Utilities.FileConverter;
 import Data.*;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class Gui extends Application {
 
     private final FileConverter fileConverter = new FileConverter("data.txt");
+
+    private GuiCanvas guiCanvas;
 
     private final ArrayList<ComboBox<String>> comboBoxArrayList = new ArrayList<>();
     private final ArrayList<Label> labelArrayList = new ArrayList<>();
@@ -56,11 +61,10 @@ public class Gui extends Application {
         launch();
     }
 
+    private int index = 0;
+
     @Override
     public void start(Stage primaryStage) throws IOException {
-
-
-
 
         // --- Labels ---
 
@@ -125,7 +129,7 @@ public class Gui extends Application {
         editBorderPane.setCenter(hBoxEdit);
 
         BorderPane simulationPane = new BorderPane();
-        GuiCanvas guiCanvas = new GuiCanvas(simulationPane);
+        guiCanvas = new GuiCanvas(simulationPane, fileConverter);
 
         // --- ----------- ---
 
@@ -145,18 +149,67 @@ public class Gui extends Application {
 //            System.out.println("editTab changed"); // debug code
         });
 
+        // --- ------- ---
 
+        // --- simulation tab ---
         Tab simulationTab = new Tab("simulatie");
+
+        BufferedImage buttonImages = ImageIO.read(getClass().getResource("/gui_resources/buttons.png"));
+        BufferedImage pauseImage = buttonImages.getSubimage(0, 0, 30, 25);
+        BufferedImage startImage = buttonImages.getSubimage(32, 0, 30, 25);
+
+        Image startImage1 = SwingFXUtils.toFXImage(startImage, null);
+        ImageView startView = new ImageView(startImage1);
+        Image pauseImage1 = SwingFXUtils.toFXImage(pauseImage, null);
+        ImageView pauseView = new ImageView(pauseImage1);
+
+        Button startButton = new Button();
+        startButton.setGraphic(startView);
+        Button pauseButton = new Button();
+        pauseButton.setGraphic(pauseView);
+        startButton.setWrapText(true);
+        pauseButton.setWrapText(true);
+        startButton.setMaxWidth(20);
+        pauseButton.setMaxWidth(20);
+
+
+
+        Label speedLabel = new Label("Speed: ");
+        Label speedLabel2 = new Label( "1.0");
+        Button slower = new Button("Slower");
+        Button faster = new Button("Faster");
+
+
+        slower.setOnAction(event -> {
+            if (index != -2) {
+                index--;
+            }
+            newSpeed(speedLabel2);
+        });
+
+        faster.setOnAction(event -> {
+            if (index != 5) {
+                index++;
+            }
+            newSpeed(speedLabel2);
+        });
+
+        VBox buttons = new VBox();
+        buttons.getChildren().addAll(startButton, pauseButton, speedLabel, speedLabel2, faster, slower);
+        simulationPane.setLeft(buttons);
+
         simulationTab.setContent(simulationPane);
-        simulationPane.setOnMouseMoved(e -> {
+
+        startButton.setOnAction(event -> {
             guiCanvas.setSimulationOn(true);
         });
-        simulationTab.setOnSelectionChanged(e -> {
+
+        pauseButton.setOnAction(event -> {
             guiCanvas.setSimulationOn(false);
         });
 
-        roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
 
+        roostermodule.getTabs().addAll(roosterTab, editTab, simulationTab);
 
         // --- ------- ---
 
@@ -174,6 +227,52 @@ public class Gui extends Application {
         primaryStage.setMaximized(true);
         primaryStage.setTitle("roostermodule");
         primaryStage.show();
+    }
+
+    private void newSpeed(Label speedLabel) {
+        double speed;
+        switch (index) {
+            case -2:
+                speed = 0.1;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case -1:
+                speed = 0.5;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case 0:
+                speed = 1.0;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case 1:
+                speed = 1.5;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case 2:
+                speed = 2.0;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case 3:
+                speed = 5.0;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case 4:
+                speed = 10.0;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+            case 5:
+                speed = 20.0;
+                speedLabel.setText(speed + "");
+                guiCanvas.getNpcConsole().setSpeed(speed);
+                break;
+        }
     }
 
     private void topLabelsCreate(VBox vBoxTimeEdit, VBox vBoxSubjectEdit, VBox vBoxTeacherEdit, VBox vBoxLocationEdit, VBox vBoxGroupEdit) {
@@ -201,31 +300,6 @@ public class Gui extends Application {
         Label groupLineEdit = new Label("----------");
         vBoxGroupEdit.getChildren().add(groupLabelEdit);
         vBoxGroupEdit.getChildren().add(groupLineEdit);
-    }
-
-    private ArrayList<String[]> arraySort(ArrayList<String[]> data) {
-        ArrayList<String> howToSort = new ArrayList<>();
-        ArrayList<String[]> sortedData = new ArrayList<>();
-        for (int i = 5; i < data.size(); i++) {
-            howToSort.add(data.get(i)[0] + "@" + i);
-//            System.out.println(data.get(i)[0] + "@" + i); // debug code
-        }
-        Collections.sort(howToSort);
-        for (int i = 0; i < 5; i++) {
-            sortedData.add(data.get(i));
-        }
-        for (int i = 0; i < howToSort.size(); i++) {
-            sortedData.add(data.get(Integer.parseInt(howToSort.get(i).split("@", 0)[1])));
-        }
-//        // debug code
-//        for (int i = 0; i < sortedData.size(); i++) {
-//            for (int j = 0; j < sortedData.get(i).length; j++) {
-//                System.out.println(sortedData.get(i)[j]);
-//            }
-//            System.out.println();
-//        }
-
-        return sortedData;
     }
 
     private void refresh() {
@@ -381,6 +455,8 @@ public class Gui extends Application {
     @Override
     public void stop() {
 //        System.out.println("\n closing application"); // debug code
+        guiCanvas.getTimer().cancel();
         fileConverter.save();
     }
+
 }

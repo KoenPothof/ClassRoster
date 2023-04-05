@@ -1,13 +1,14 @@
 package Data;
 
+import NPC.NPC;
+
 public class Group {
+
     private String group;
+
 
     public Group(String group) {
         this.group = group;
-        for (int i = 0; i < 16; i++) {
-
-        }
     }
 
     @Override

@@ -22,17 +22,24 @@ public class Pathfinding {
     private Utilities.JsonReader jsonReader;
 
 
-    public Pathfinding() {
-        this.jsonReader = new Utilities.JsonReader("Walls");
+    public Pathfinding(int targetX, int targetY) {
+        JsonReader reader = null;
+        try {
+            reader = Json.createReader(new FileInputStream("resources/map/project.json"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        JsonObject root = reader.readObject();
 
-        int mapWidth = jsonReader.getMapWidth();
-        int mapHeight = jsonReader.getMapHeight();
+        int mapWidth = root.getInt("width");
+        int mapHeight = root.getInt("height");
 
+        JsonObject layer = root.getJsonArray("layers").getJsonObject(0);
         data = new int[mapWidth][mapHeight];
         int count = 0;
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
-                data[x][y] = jsonReader.getDataArray().getInt(count);
+                data[x][y] = layer.getJsonArray("data").getInt(count);
                 count++;
             }
         }
@@ -46,7 +53,8 @@ public class Pathfinding {
             PathfindingTile currentTile = queue.remove();
             int x = currentTile.getTileX();
             int y = currentTile.getTileY();
-            int[][] neighbours = currentTile.getNeighbours();
+            int alpha[] = getNextTile(x, y);
+            int[][] neighbours = currentTile.getNeighbours(alpha);
             for (int i = 0; i < neighbours.length; i++) {
                 if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
                     pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
@@ -57,32 +65,7 @@ public class Pathfinding {
         }
     }
 
-//    public int[][] findPath(int targetX, int targetY) {
-//        queue.clear();
-//        pathfindingTiles[targetX][targetY] = new PathfindingTile(targetX, targetY);
-//        queue.add(new PathfindingTile(targetX, targetY));
-//        int[][] path = new int[data.length][data[0].length];
-//        for (int x = 0; x < data.length; x++) {
-//            for (int y = 0; y < data[0].length; y++) {
-//                path[x][y] = data[x][y];
-//            }
-//        }
-//        path[targetX][targetY] = 1;
-//        while (!queue.isEmpty()) {
-//            PathfindingTile currentTile = queue.remove();
-//            int x = currentTile.getTileX();
-//            int y = currentTile.getTileY();
-//            int[][] neighbours = currentTile.getNeighbours();
-//            for (int i = 0; i < neighbours.length; i++) {
-//                if (path[neighbours[i][0]][neighbours[i][1]] == 0) {
-//                    pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, path[x][y] + 1);
-//                    queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
-//                    path[neighbours[i][0]][neighbours[i][1]] = path[x][y] + 1;
-//                }
-//            }
-//        }
-//        return path;
-//    }
+
 
 
     public void dataCheck(int[][] data) {
@@ -117,7 +100,7 @@ public class Pathfinding {
                     ));
 
                     if (pathfindingTiles[i][j].getTargetTileX() == i && pathfindingTiles[i][j].getTargetTileY() == j) {
-                        g2d.setColor(Color.GREEN);
+                        g2d.setColor(Color.RED);
                         g2d.fill(new Rectangle2D.Double(16 * i, 16 * j, 16, 16));
                     }
                 }
