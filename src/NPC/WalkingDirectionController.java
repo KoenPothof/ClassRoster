@@ -1,21 +1,18 @@
 package NPC;
 
-import org.jfree.fx.FXGraphics2D;
-
 import javax.imageio.ImageIO;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class SpriteDirection {
+public class WalkingDirectionController {
 
     private BufferedImage image;
     private BufferedImage images[] = new BufferedImage[16];
-    private WalkingDirection direction = WalkingDirection.DOWN;
+    private WalkingDirections direction = WalkingDirections.DOWN;
 
-    public SpriteDirection() {
+    public WalkingDirectionController(String filename) {
         try {
-            image = ImageIO.read(getClass().getResource("/npc/sprite.png"));
+            image = ImageIO.read(getClass().getResource("/npc/" + filename));
             for (int i = 0; i < 16; i++) {
                 double spriteHeight = 24;
                 double spriteWidth = 16;
@@ -27,13 +24,13 @@ public class SpriteDirection {
         }
     }
 
-    public void setDirection(WalkingDirection direction) {
+    public void setDirection(WalkingDirections direction) {
         this.direction = direction;
         switch (direction) {
-            case UP:
+            case DOWN:
                 teller2 = 0;
                 break;
-            case DOWN:
+            case UP:
                 teller2 = 4;
                 break;
             case LEFT:
@@ -46,29 +43,34 @@ public class SpriteDirection {
 
     }
 
+    private int teller = 0;
     private int teller2 = 0;
 
 
     public void update() {
-        teller2++;
-        switch (direction) {
-            case UP:
-                if (teller2 > 3)
-                    teller2 = 0;
-                break;
-            case DOWN:
-                if (teller2 > 7)
-                    teller2 = 4;
-                break;
-            case LEFT:
-                if (teller2 > 11)
-                    teller2 = 8;
-                break;
-            case RIGHT:
-                if (teller2 > 15)
-                    teller2 = 12;
-                break;
+        teller++;
+        if (teller % 10 == 0){
+            teller2++;
+            switch (direction) {
+                case DOWN:
+                    if (teller2 > 3)
+                        teller2 = 0;
+                    break;
+                case UP:
+                    if (teller2 > 7)
+                        teller2 = 4;
+                    break;
+                case LEFT:
+                    if (teller2 > 11)
+                        teller2 = 8;
+                    break;
+                case RIGHT:
+                    if (teller2 > 15)
+                        teller2 = 12;
+                    break;
+            }
         }
+
     }
 
     public BufferedImage getCurrentImage() {

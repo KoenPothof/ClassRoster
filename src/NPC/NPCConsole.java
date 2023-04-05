@@ -1,11 +1,13 @@
 package NPC;
 
+import Data.Rooms.Room;
+import Data.Rooms.RoomType;
 import Utilities.FileConverter;
 import Utilities.JsonReader;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.*;
 
 public class NPCConsole {
 
@@ -13,6 +15,8 @@ public class NPCConsole {
     private ArrayList<NPC[]> npcsByGroup;
     private FileConverter fileConverter;
     private ArrayList<Point2D> muren;
+    private Room cafeteria;
+    private Room teacherRoom;
 
 
     private double speed = 1;
@@ -20,6 +24,8 @@ public class NPCConsole {
 
     public NPCConsole(FileConverter fileConverter) {
         this.fileConverter = fileConverter;
+        this.cafeteria = new Room("cafeteria", fileConverter.getJsonReader().getObjectX()[7], fileConverter.getJsonReader().getObjectY()[7], fileConverter.getJsonReader().getObjectWidth()[7], fileConverter.getJsonReader().getObjectHeight()[7], RoomType.CANTEEN);
+        this.teacherRoom = new Room("teacherRoom", fileConverter.getJsonReader().getObjectX()[6], fileConverter.getJsonReader().getObjectY()[6], fileConverter.getJsonReader().getObjectWidth()[6], fileConverter.getJsonReader().getObjectHeight()[6], RoomType.TEACHERROOM);
         this.muren = new ArrayList<>();
         JsonReader jsonReader = new JsonReader("Walls");
         for (int i = 0; i < jsonReader.getDataArrayInt().length; i++) {
@@ -37,41 +43,60 @@ public class NPCConsole {
                 npcsByGroup.get(i)[j] = npc;
             }
         }
-        for (int i = 0; i < fileConverter.getTeachers().length; i++) {
-            this.npcs.add(new NPC(fileConverter.getTeachers()[i].toString()));
+        npcsByGroup.add(new NPC[fileConverter.getTeachers().length]);
+        for (int j = 0; j < fileConverter.getTeachers().length; j++) {
+            NPC npc = new NPC();
+            this.npcs.add(new NPC());
+            npcsByGroup.get(npcsByGroup.size() - 1)[j] = npc;
         }
+        pathfindingUpdate();
 
     }
 
+    public ArrayList<NPC> npcSort(ArrayList<NPC> npcs) {
+        Collections.sort(npcs, new Comparator<NPC>() {
+            @Override
+            public int compare(NPC npc1, NPC npc2) {
+                return Double.compare(npc1.positionY, npc2.positionY);
+            }
+        });
+        return npcs;
+    }
+
     public void update() {
+        npcs = npcSort(npcs);
         for (NPC npc : npcs) {
+
+            if (!npc.isMoving()) {
+                continue;
+            }
 
             int npcX = npc.getPosition()[0];
             int npcY = npc.getPosition()[1];
+            int[] nextTile = new int[2];
             try {
-                int[] nextTile = npc.getPathfinding().getNextTile(npcX, npcY);
-                npc.setTarget(nextTile[0], nextTile[1]);
-
-                if (npcX == nextTile[0] && npcY == nextTile[1]) {
-                    continue;
-                }
+                nextTile = npc.getPathfinding().getNextTile(npcX, npcY);
+                npc.setTarget(nextTile[0], nextTile[1], false);
             } catch (Exception ignored) {
             }
 
 
             double angleTo = Math.atan2(npc.targetY - npc.positionY, npc.targetX - npc.positionX);
             double degreesTo = 180 + Math.toDegrees(angleTo);
+//            System.out.println(degreesTo);
 
-            if (degreesTo < 0 && degreesTo > -90) {
-                npc.getSpriteDirection().setDirection(WalkingDirection.LEFT);
-            } else if (degreesTo < -90 && degreesTo > -180) {
-                npc.getSpriteDirection().setDirection(WalkingDirection.RIGHT);
-            } else if (degreesTo < 180 && degreesTo > 90) {
-                npc.getSpriteDirection().setDirection(WalkingDirection.RIGHT);
-            } else if (degreesTo < 90 && degreesTo > 0) {
-                npc.getSpriteDirection().setDirection(WalkingDirection.LEFT);
+            if (degreesTo > 60 && degreesTo <= 120) {
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.UP);
+            } else if (degreesTo > 120 && degreesTo <= 240) {
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.RIGHT);
+            } else if (degreesTo > 240 && degreesTo <= 300) {
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.DOWN);
+            } else if (degreesTo > 300 || degreesTo <= 60) {
+                npc.getWalkingDirectionController().setDirection(WalkingDirections.LEFT);
             }
-            npc.getSpriteDirection().update();
+            npc.getWalkingDirectionController().update();
+
+
 
             double oldPosX = npc.positionX;
             double oldPosY = npc.positionY;
@@ -93,8 +118,8 @@ public class NPCConsole {
                 }
                 Point2D otherNpcPosition = new Point2D.Double(otherNPC.positionX, otherNPC.positionY);
                 if (otherNpcPosition.distanceSq(new Point2D.Double(npc.positionX, npc.positionY)) < 300) {
-                    npc.positionX = npc.positionX + (npc.positionX - otherNPC.positionX) * .1;
-                    npc.positionY = npc.positionY + (npc.positionY - otherNPC.positionY) * .1;
+                    npc.positionX = npc.positionX + (npc.positionX - otherNPC.positionX) * .05;
+                    npc.positionY = npc.positionY + (npc.positionY - otherNPC.positionY) * .05;
                 }
 
             }
@@ -103,29 +128,82 @@ public class NPCConsole {
                 if ((int) npc.positionY / 16 == (int) muren.get(l).getY() && (int) npc.positionX / 16 == (int) muren.get(l).getX()) {
                     npc.positionX = oldPosX;
                     npc.positionY = oldPosY;
+
+
                     break;
                 }
+            }
+
+            if (npcX == nextTile[0] && npcY == nextTile[1] && npc.isMoving() == true) {
+                npc.positionX = npc.targetX + 8;
+                npc.positionY = npc.targetY - 2;
+                npc.getWalkingDirectionController().setDirection(npc.getPathfinding().getWalkingDirection());
+//                npc.getWalkingDirectionController().update();
+                npc.setMoving(false);
+//                npc.getWalkingDirectionController().setDirection(WalkingDirections.UP);
             }
 
         }
     }
 
 
-    public void pathfindingUpdate() {
+    public void pathfindingUpdate(int time) {
         System.out.println("pathfinding update");
-
-        for (int i = 0; i < fileConverter.getTimes().length; i++) {
-            String currentTime = fileConverter.getTimes()[i].toString();
-            for (int j = 0; j < fileConverter.getLessons().size(); j++) {
-                if (fileConverter.getLessons().get(j).getTime().toString().equals(currentTime)) {
-                    for (int k = 0; k < npcsByGroup.size(); k++) {
-                        if (npcsByGroup.get(k)[0].getGroup().equals(fileConverter.getLessons().get(j).getGroup().toString())) {
-                            for (int l = 0; l < npcsByGroup.get(k).length; l++) {
-                                npcsByGroup.get(k)[l].setPathfinding(fileConverter.getLessons().get(j).getClassroom().getPathfindings()[l]);
+        for (NPC npc : npcs) {
+            npc.setPathfinding(null);
+            npc.setMoving(true);
+        }
+        int cafeteriaCounter = 0;
+        int teacherCounter = 0;
+        String currentTime = fileConverter.getTimes()[time].toString();
+        for (int j = 0; j < fileConverter.getLessons().size(); j++) {
+            if (fileConverter.getLessons().get(j).getTime().toString().equals(currentTime)) {
+                for (int k = 0; k < npcsByGroup.size(); k++) {
+                    if (npcsByGroup.get(k)[0].getGroup().equals(fileConverter.getLessons().get(j).getGroup().toString()) && npcsByGroup.get(k)[0].getPathfinding() == null) {
+                        for (int l = 0; l < npcsByGroup.get(k).length; l++) {
+                            npcsByGroup.get(k)[l].setPathfinding(fileConverter.getLessons().get(j).getClassroom().getPathfindings()[l]);
+                        }
+                    } else if (npcsByGroup.get(k)[0].getGroup().equals("teacher")) {
+                        for (int i = 0; i < npcsByGroup.get(k).length; i++) {
+                            if (npcsByGroup.get(k)[i].getPathfinding() == null) {
+                                npcsByGroup.get(k)[i].setPathfinding(fileConverter.getLessons().get(j).getClassroom().getTeacherPathfinding());
+                                break;
                             }
                         }
                     }
                 }
+            }
+        }
+        for (int i = 0; i < npcsByGroup.size(); i++) {
+            if (npcsByGroup.get(i)[0].getPathfinding() == null) {
+                for (int j = 0; j < npcsByGroup.get(i).length; j++) {
+                    npcsByGroup.get(i)[j].setPathfinding(cafeteria.getPathfindings()[cafeteriaCounter]);
+                    cafeteriaCounter++;
+                }
+            }
+        }
+        for (int i = 0; i < npcsByGroup.get(npcsByGroup.size()-1).length; i++) {
+            if (npcsByGroup.get(npcsByGroup.size()-1)[i].getPathfinding() == null) {
+                npcsByGroup.get(npcsByGroup.size()-1)[i].setPathfinding(teacherRoom.getPathfindings()[teacherCounter]);
+                teacherCounter++;
+            }
+        }
+    }
+
+    public void pathfindingUpdate() {
+        System.out.println("pathfinding update");
+        int cafeteriaCounter = 0;
+        int teacherCounter = 0;
+        for (NPC npc : npcs) {
+            npc.setPathfinding(null);
+            npc.setMoving(true);
+            if (npc.group.equals("teacher")) {
+                // nog te doen
+                npc.setPathfinding(teacherRoom.getPathfindings()[teacherCounter]);
+                teacherCounter++;
+            } else {
+                npc.setPathfinding(cafeteria.getPathfindings()[cafeteriaCounter]);
+                cafeteriaCounter++;
             }
         }
     }

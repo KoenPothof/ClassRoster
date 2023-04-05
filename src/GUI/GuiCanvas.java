@@ -6,13 +6,18 @@ import NPC.NPCConsole;
 import PathFinding.Pathfinding;
 import Utilities.FileConverter;
 import javafx.animation.AnimationTimer;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import map.Map;
 import org.jfree.fx.FXGraphics2D;
 import org.jfree.fx.ResizableCanvas;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -32,12 +37,12 @@ public class GuiCanvas {
 
     private NPCConsole npcConsole;
 
-    private int counter = 0;
-    private final long timerTime = 1; // 1000 = 1 second
+    private int counter = 480;
+    private final long timerTime = 1000; // 1000 = 1 second
 
     public GuiCanvas(BorderPane borderPanePane, FileConverter fileConverter) throws IOException {
         map = new Map("map/project.json");
-        pathfinding = new Pathfinding(15,20);
+//        pathfinding = new Pathfinding(15, 20);
         canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 
@@ -65,27 +70,26 @@ public class GuiCanvas {
             }
         }.start();
 
-        timer = new Timer();
-        task = new TimerTask() {
-            @Override
-            public void run() {
-                if (counter%200 == 0)
-                    npcConsole.pathfindingUpdate();
-                counter++;
-            }
-        };
-        timer.schedule(task, 0, timerTime);
+        newTimer(1);
 
         draw(g2d);
     }
+
+    String text = "Test Test";
 
     public void draw(FXGraphics2D g2d) {
         g2d.setBackground(Color.white);
         g2d.clearRect(0, 0, (int) canvas.getWidth(), (int) canvas.getHeight());
         map.draw(g2d);
+
 //        pathfinding.draw(g2d);
         npcConsole.draw(g2d);
 
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        gc.setStroke(javafx.scene.paint.Paint.valueOf("white"));
+        gc.setFont(new Font("Arial", 34));
+        gc.strokeText(text, 1580, 100);
 
 //        pathfinding.numberDraw(g2d);
     }
@@ -94,13 +98,65 @@ public class GuiCanvas {
         npcConsole.update();
     }
 
+    private void newTimer(double time) {
+        try {
+            timer.cancel();
+        } catch (Exception ignored) {
+        }
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                if (simulationOn) {
+                    counter++;
+
+                    int hours = counter / 60;
+                    int minutes = counter % 60;
+//                text = hours + ":" + minutes;
+
+                    if (hours < 10) {
+                        text = String.format("0%d:%02d", hours, minutes);
+                    } else {
+                        text = String.format("%d:%02d", hours, minutes);
+                    }
+
+                    if (text.equals("08:20")) {
+                        npcConsole.pathfindingUpdate(0);
+                    } else if (text.equals("09:20")) {
+                        npcConsole.pathfindingUpdate(1);
+                    } else if (text.equals("10:10")) {
+                        npcConsole.pathfindingUpdate(2);
+                    } else if (text.equals("11:00")) {
+                        npcConsole.pathfindingUpdate();
+                    } else if (text.equals("11:15")) {
+                        npcConsole.pathfindingUpdate(3);
+                    } else if (text.equals("12:05")) {
+                        npcConsole.pathfindingUpdate(4);
+                    } else if (text.equals("12:55")) {
+                        npcConsole.pathfindingUpdate();
+                    } else if (text.equals("13:30")) {
+                        npcConsole.pathfindingUpdate(5);
+                    } else if (text.equals("14:20")) {
+                        npcConsole.pathfindingUpdate(6);
+                    } else if (text.equals("15:10")) {
+                        npcConsole.pathfindingUpdate(7);
+                    }
+
+
+//                System.out.println(text);
+                }
+            }
+        };
+        timer.schedule(task, 0, (long) (timerTime / time));
+    }
+
     public void setSimulationOn(boolean simulationOn) {
         this.simulationOn = simulationOn;
     }
 
     public void setTimerTime(double time) {
         counter--;
-        timer.schedule(task, 0, (long) (timerTime * time));
+        newTimer(time);
     }
 
     public Timer getTimer() {
@@ -110,4 +166,5 @@ public class GuiCanvas {
     public NPCConsole getNpcConsole() {
         return npcConsole;
     }
+
 }

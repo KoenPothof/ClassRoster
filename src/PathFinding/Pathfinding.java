@@ -1,11 +1,11 @@
 package PathFinding;
 
-import map.Layer;
+import NPC.WalkingDirections;
+import Utilities.JsonReader;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.Json;
 import javax.json.JsonObject;
-import javax.json.JsonReader;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -20,21 +20,15 @@ public class Pathfinding {
     private PathfindingTile[][] pathfindingTiles;
     private Queue<PathfindingTile> queue = new LinkedList<>();
     private Utilities.JsonReader jsonReader;
+    WalkingDirections walkingDirection;
 
 
-    public Pathfinding(int targetX, int targetY) {
-        JsonReader reader = null;
-        try {
-            reader = Json.createReader(new FileInputStream("resources/map/project.json"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        JsonObject root = reader.readObject();
+    public Pathfinding(int targetX, int targetY, WalkingDirections walkingDirection) {
+        jsonReader = new JsonReader();
+        int mapWidth = jsonReader.getMapWidth();
+        int mapHeight = jsonReader.getMapHeight();
 
-        int mapWidth = root.getInt("width");
-        int mapHeight = root.getInt("height");
-
-        JsonObject layer = root.getJsonArray("layers").getJsonObject(0);
+        JsonObject layer = jsonReader.getLayerArray().getJsonObject(0);
         data = new int[mapWidth][mapHeight];
         int count = 0;
         for (int y = 0; y < mapHeight; y++) {
@@ -56,13 +50,14 @@ public class Pathfinding {
             int alpha[] = getNextTile(x, y);
             int[][] neighbours = currentTile.getNeighbours(alpha);
             for (int i = 0; i < neighbours.length; i++) {
-                if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
+                  if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
                     pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
                     queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
                     data[neighbours[i][0]][neighbours[i][1]] = data[x][y] + 1;
                 }
             }
         }
+        this.walkingDirection = walkingDirection;
     }
 
 
@@ -132,5 +127,7 @@ public class Pathfinding {
         return nextTile;
     }
 
-
+    public WalkingDirections getWalkingDirection() {
+        return walkingDirection;
+    }
 }

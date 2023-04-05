@@ -7,44 +7,46 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class NPC {
+    String group;
     double positionX;
     double positionY;
     double targetX;
     double targetY;
-    boolean moving = false;
+    boolean moving = true;
 
     private final int tileWidth = 16;
     private final int tileOffset = 8;
 
 
     private BufferedImage image;
-    private SpriteDirection spriteDirection;
+    private WalkingDirectionController notAFinalName;
     private Pathfinding pathfinding;
-    private String group;
+
 
     // note ons poppetje mag alleen maar 90 graden hoeken draaien dus goed invoegen bij de mapping
 
 
     public NPC(String group) {
         this.group = group;
-        this.positionX = 55 * tileWidth - tileOffset;
+        this.positionX = 53 * tileWidth - tileOffset;
         this.positionY = 8 * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
-        this.spriteDirection = new SpriteDirection();
-        this.image = spriteDirection.getCurrentImage();
+        this.notAFinalName = new WalkingDirectionController("sprite.png");
+        this.image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
     }
 
 
 
-    public NPC(int x, int y) {
-        this.positionX = x * tileWidth - tileOffset;
-        this.positionY = y * tileWidth - tileOffset;
+    public NPC() {
+        this.group = "teacher";
+        this.positionX = 55 * tileWidth - tileOffset;
+        this.positionY = 8 * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
-        this.spriteDirection = new SpriteDirection();
-        image = spriteDirection.getCurrentImage();
+        this.notAFinalName = new WalkingDirectionController("sprite2.png");
+        this.image = notAFinalName.getCurrentImage();
         this.pathfinding = null;
     }
 
@@ -53,7 +55,7 @@ public class NPC {
         this.image = spriteDirection.getCurrentImage();
 
         tx.translate(positionX, positionY);
-        tx.scale(1.5, 2.3);
+        tx.scale(1.3, 2.3);
         tx.translate(-image.getWidth() / 2d, -image.getHeight() / 1.2d);
         g.drawImage(image, tx, null);
 
@@ -63,9 +65,16 @@ public class NPC {
     }
 
     // plek waar je naar toe moet
-    public void setTarget(int x, int y) {
-        this.targetX = x * tileWidth + tileOffset;
-        this.targetY = y * tileWidth + tileOffset;
+    public void setTarget(int x, int y, boolean raw) {
+        if (raw) {
+            this.targetX = x;
+            this.targetY = y;
+        } else {
+            this.targetX = x * tileWidth + tileOffset;
+            this.targetY = y * tileWidth + tileOffset;
+        }
+//        this.targetX = x * tileWidth + tileOffset;
+//        this.targetY = y * tileWidth + tileOffset;
 //        this.target = new Point2D.Double(x * tileWidth - tileOffset, y * tileWidth - tileOffset);
     }
 
@@ -92,8 +101,12 @@ public class NPC {
         return position;
     }
 
-    public SpriteDirection getSpriteDirection() {
-        return spriteDirection;
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public WalkingDirectionController getWalkingDirectionController() {
+        return notAFinalName;
     }
 
     public Pathfinding getPathfinding() {

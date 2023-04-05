@@ -36,7 +36,6 @@ public class Map {
     private int mapWidth;
     private int mapHeight;
     private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
-    private ArrayList<Layer> layers = new ArrayList<>();
     private BufferedImage screenshot;
 
     public Map(String fileName) throws IOException {
@@ -64,30 +63,11 @@ public class Map {
                         gid++;
                     }
                 }
-
-
-
-
             }
             tileHeight = jsonReader.getTileHeight();
             tileWidth = jsonReader.getTileWidth();
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-
-// leest alle data uit om de map te tekenen.
-        for (int i = 0; i < layerArray.size(); i++) {
-            if (i != 3) {
-                continue;
-            }
-            JsonObject layer = layerArray.getJsonObject(i);
-            int[] data = new int[layer.getJsonArray("data").size()];
-            for (int j = 0; j < data.length; j++) {
-                data[j] = layer.getJsonArray("data").getInt(j);
-            }
-//            System.out.println(Arrays.toString(data));
-            layers.add(new Layer(data));
         }
 
 
@@ -146,11 +126,6 @@ public class Map {
 
     public void draw(FXGraphics2D g2d) {
     g2d.drawImage(screenshot, 0, 0, null);
-//        for (Layer layer : layers) {
-//            layer.draw(g2d, this);
-//        }
-
-
     }
 
     public int getWidth() {
