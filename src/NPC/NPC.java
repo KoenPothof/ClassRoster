@@ -18,7 +18,7 @@ public class NPC {
 
 
     private BufferedImage image;
-    private SpriteDirection notAFinalName;
+    private SpriteDirection spriteDirection;
     private Pathfinding pathfinding;
     private String group;
 
@@ -31,8 +31,8 @@ public class NPC {
         this.positionY = 8 * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
-        this.notAFinalName = new SpriteDirection();
-        this.image = notAFinalName.getCurrentImage();
+        this.spriteDirection = new SpriteDirection();
+        this.image = spriteDirection.getCurrentImage();
         this.pathfinding = null;
     }
 
@@ -43,14 +43,14 @@ public class NPC {
         this.positionY = y * tileWidth - tileOffset;
         this.targetX = this.positionX;
         this.targetY = this.positionY;
-        this.notAFinalName = new SpriteDirection();
-        image = notAFinalName.getCurrentImage();
+        this.spriteDirection = new SpriteDirection();
+        image = spriteDirection.getCurrentImage();
         this.pathfinding = null;
     }
 
     public void draw(Graphics2D g) {
         AffineTransform tx = new AffineTransform();
-        this.image = notAFinalName.getCurrentImage();
+        this.image = spriteDirection.getCurrentImage();
 
         tx.translate(positionX, positionY);
         tx.scale(1.5, 2.3);
@@ -92,8 +92,8 @@ public class NPC {
         return position;
     }
 
-    public SpriteDirection getNotAFinalName() {
-        return notAFinalName;
+    public SpriteDirection getSpriteDirection() {
+        return spriteDirection;
     }
 
     public Pathfinding getPathfinding() {

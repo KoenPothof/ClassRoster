@@ -5,12 +5,7 @@ import Utilities.JsonReader;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.time.Clock;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class NPCConsole {
 
@@ -68,15 +63,15 @@ public class NPCConsole {
             double degreesTo = 180 + Math.toDegrees(angleTo);
 
             if (degreesTo < 0 && degreesTo > -90) {
-                npc.getNotAFinalName().setDirection(WalkingDirection.LEFT);
+                npc.getSpriteDirection().setDirection(WalkingDirection.LEFT);
             } else if (degreesTo < -90 && degreesTo > -180) {
-                npc.getNotAFinalName().setDirection(WalkingDirection.RIGHT);
+                npc.getSpriteDirection().setDirection(WalkingDirection.RIGHT);
             } else if (degreesTo < 180 && degreesTo > 90) {
-                npc.getNotAFinalName().setDirection(WalkingDirection.RIGHT);
+                npc.getSpriteDirection().setDirection(WalkingDirection.RIGHT);
             } else if (degreesTo < 90 && degreesTo > 0) {
-                npc.getNotAFinalName().setDirection(WalkingDirection.LEFT);
+                npc.getSpriteDirection().setDirection(WalkingDirection.LEFT);
             }
-            npc.getNotAFinalName().update();
+            npc.getSpriteDirection().update();
 
             double oldPosX = npc.positionX;
             double oldPosY = npc.positionY;
