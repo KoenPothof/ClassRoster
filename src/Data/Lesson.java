@@ -1,15 +1,15 @@
 package Data;
 
-import java.lang.reflect.Array;
+import Data.Rooms.Room;
 
 public class Lesson {
     private Time time;
     private Subject subject;
     private Teacher teacher;
-    private Classroom classroom;
+    private Room classroom;
     private Group group;
 
-    public Lesson(Time time, Subject subject, Teacher teacher, Classroom classroom, Group group) {
+    public Lesson(Time time, Subject subject, Teacher teacher, Room classroom, Group group) {
         this.time = time;
         this.subject = subject;
         this.teacher = teacher;
@@ -29,7 +29,7 @@ public class Lesson {
         return teacher;
     }
 
-    public Classroom getClassroom() {
+    public Room getClassroom() {
         return classroom;
     }
 
@@ -49,7 +49,7 @@ public class Lesson {
         this.teacher = teacher;
     }
 
-    public void setClassroom(Classroom classroom) {
+    public void setClassroom(Room classroom) {
         this.classroom = classroom;
     }
 

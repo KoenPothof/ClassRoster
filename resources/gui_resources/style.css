@@ -1,7 +1,7 @@
 .button:hover {
-    -fx-background-color: linear-gradient(#a4a4a4, #a6a6a6);
+    -fx-background-color: linear-gradient(#101010, #a6a6a6);
 }
-.combo-box  {
-    -fx-background-color: linear-gradient(#a4a4a4, #919191);
-}
+/*.combo-box  {*/
+/*    -fx-background-color: linear-gradient(#a4a4a4, #919191);*/
+/*}*/
 

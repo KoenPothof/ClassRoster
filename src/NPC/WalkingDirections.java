@@ -1,6 +1,6 @@
 package NPC;
 
-public enum WalkingDirection {
+public enum WalkingDirections {
     UP,
     DOWN,
     LEFT,

@@ -1,5 +1,6 @@
 package GUI;
 
+import NPC.NPCConsole;
 import Utilities.FileConverter;
 import Data.*;
 import javafx.application.Application;
@@ -230,49 +231,36 @@ public class Gui extends Application {
     }
 
     private void newSpeed(Label speedLabel) {
-        double speed;
+        double speed = .9999999;
         switch (index) {
             case -2:
                 speed = 0.1;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case -1:
                 speed = 0.5;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 0:
                 speed = 1.0;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 1:
                 speed = 1.5;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 2:
                 speed = 2.0;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 3:
                 speed = 5.0;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 4:
                 speed = 10.0;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
             case 5:
                 speed = 20.0;
-                speedLabel.setText(speed + "");
-                guiCanvas.getNpcConsole().setSpeed(speed);
                 break;
         }
+        speedLabel.setText(speed + "");
+        guiCanvas.getNpcConsole().setSpeed(speed);
+        guiCanvas.setTimerTime(speed);
     }
 
     private void topLabelsCreate(VBox vBoxTimeEdit, VBox vBoxSubjectEdit, VBox vBoxTeacherEdit, VBox vBoxLocationEdit, VBox vBoxGroupEdit) {
@@ -429,24 +417,42 @@ public class Gui extends Application {
             for (int i = 0; i < addCheck.length; i++) {
                 alpha = alpha + addCheck[i];
             }
-            if (alpha == 5) {
-                String[] beta = {"", "", "", "", ""};
-                for (int j = 0; j < addComboBoxesArrayList.size(); j++) {
-                    beta[j] = addComboBoxesArrayList.get(j).getValue();
+            boolean hasDuplicates = false;
+
+            for (int i = 0; i < fileConverter.getLessons().size() - 1; i++) {
+                String currentTime = fileConverter.getTimes()[i].toString();
+                for (int j = i + 1; j < fileConverter.getGroups().length; j++) {
+                    if (fileConverter.getLessons().get(j).getTime().toString().equals(currentTime)) {
+                        hasDuplicates = true;
+                        break;
+                    }
                 }
-                fileConverter.getLessons().add(new Lesson(
-                        fileConverter.getTimes()[fileConverter.getDataHashMap().get(beta[0])],
-                        fileConverter.getSubjects()[fileConverter.getDataHashMap().get(beta[1])],
-                        fileConverter.getTeachers()[fileConverter.getDataHashMap().get(beta[2])],
-                        fileConverter.getClassrooms()[fileConverter.getDataHashMap().get(beta[3])],
-                        fileConverter.getGroups()[fileConverter.getDataHashMap().get(beta[4])]
-                ));
-                comboBoxesAdd();
-                labelsAdd();
-                refresh();
-                for (int j = 0; j < addCheck.length; j++) {
-                    addCheck[j] = 0;
-                    addComboBoxesArrayList.get(j).setValue("");
+                if (hasDuplicates) {
+                    break;
+                }
+            }
+            if(hasDuplicates){
+                new Alert(Alert.AlertType.NONE, "Er zijn te veel groepen in deze les!", ButtonType.OK).show();
+            } else if(hasDuplicates==false) {
+                if (alpha == 5) {
+                    String[] beta = {"", "", "", "", ""};
+                    for (int j = 0; j < addComboBoxesArrayList.size(); j++) {
+                        beta[j] = addComboBoxesArrayList.get(j).getValue();
+                    }
+                    fileConverter.getLessons().add(new Lesson(
+                            fileConverter.getTimes()[fileConverter.getDataHashMap().get(beta[0])],
+                            fileConverter.getSubjects()[fileConverter.getDataHashMap().get(beta[1])],
+                            fileConverter.getTeachers()[fileConverter.getDataHashMap().get(beta[2])],
+                            fileConverter.getClassrooms()[fileConverter.getDataHashMap().get(beta[3])],
+                            fileConverter.getGroups()[fileConverter.getDataHashMap().get(beta[4])]
+                    ));
+                    comboBoxesAdd();
+                    labelsAdd();
+                    refresh();
+                    for (int j = 0; j < addCheck.length; j++) {
+                        addCheck[j] = 0;
+                        addComboBoxesArrayList.get(j).setValue("");
+                    }
                 }
             }
         });

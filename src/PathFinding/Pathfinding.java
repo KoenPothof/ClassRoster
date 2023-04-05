@@ -1,6 +1,6 @@
 package PathFinding;
 
-import map.Layer;
+import NPC.WalkingDirections;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.json.Json;
@@ -20,9 +20,10 @@ public class Pathfinding {
     private PathfindingTile[][] pathfindingTiles;
     private Queue<PathfindingTile> queue = new LinkedList<>();
     private Utilities.JsonReader jsonReader;
+    WalkingDirections walkingDirection;
 
 
-    public Pathfinding(int targetX, int targetY) {
+    public Pathfinding(int targetX, int targetY, WalkingDirections walkingDirection) {
         JsonReader reader = null;
         try {
             reader = Json.createReader(new FileInputStream("resources/map/project.json"));
@@ -56,13 +57,14 @@ public class Pathfinding {
             int alpha[] = getNextTile(x, y);
             int[][] neighbours = currentTile.getNeighbours(alpha);
             for (int i = 0; i < neighbours.length; i++) {
-                if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
+                  if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
                     pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
                     queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
                     data[neighbours[i][0]][neighbours[i][1]] = data[x][y] + 1;
                 }
             }
         }
+        this.walkingDirection = walkingDirection;
     }
 
 
@@ -131,5 +133,7 @@ public class Pathfinding {
         return nextTile;
     }
 
-
+    public WalkingDirections getWalkingDirection() {
+        return walkingDirection;
+    }
 }

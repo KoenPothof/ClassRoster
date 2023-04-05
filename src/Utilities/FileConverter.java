@@ -1,6 +1,8 @@
 package Utilities;
 
 import Data.*;
+import Data.Rooms.Room;
+import Data.Rooms.RoomType;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,7 +19,7 @@ public class FileConverter {
     private Time[] times;
     private Subject[] subjects;
     private Teacher[] teachers;
-    private Classroom[] classrooms;
+    private Room[] classrooms;
     private Group[] groups;
     private ArrayList<Lesson> lessons = new ArrayList<>();
     private HashMap<String, Integer> dataHashMap = new HashMap<>();
@@ -47,7 +49,7 @@ public class FileConverter {
                 pw.print(teacher + "@");
             }
             pw.println();
-            for (Classroom classroom : classrooms) {
+            for (Room classroom : classrooms) {
                 pw.print(classroom + "@");
             }
             pw.println();
@@ -125,11 +127,11 @@ public class FileConverter {
             }
 
             data = input.nextLine().split("@", 0);
-            classrooms = new Classroom[data.length];
+            classrooms = new Room[data.length];
             list.add(data);
             for (int i = 0; i < data.length; i++) {
                 String datum = data[i];
-                classrooms[i] = new Classroom(datum, jsonReader.getObjectX()[i],jsonReader.getObjectY()[i],jsonReader.getObjectWidth()[i],jsonReader.getObjectHeight()[i]);
+                classrooms[i] = new Room(datum, jsonReader.getObjectX()[i],jsonReader.getObjectY()[i],jsonReader.getObjectWidth()[i],jsonReader.getObjectHeight()[i], RoomType.CLASSROOM);
                 dataHashMap.put(datum, i);
 //                System.out.println("Loaded: " + datum); // debug code
             }
@@ -176,7 +178,7 @@ public class FileConverter {
         return teachers;
     }
 
-    public Classroom[] getClassrooms() {
+    public Room[] getClassrooms() {
         return classrooms;
     }
 
