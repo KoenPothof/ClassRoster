@@ -1,25 +1,11 @@
 08:30-09:20@09:20-10:10@10:10-11:00@11:15-12:05@12:05-12:55@13:30-14:20@14:20-15:10@15:10-16:00@
-OOSD@2d Graphics@IPJ@
-hans@johan@joli@
-LD112@LA136@OC106@
-A1@A2@A3@
-09:20-10:10@2d Graphics@johan@LA136@A3@
-09:20-10:10@2d Graphics@johan@LA136@A3@
-09:20-10:10@2d Graphics@johan@LA136@A3@
-09:20-10:10@2d Graphics@johan@LA136@A3@
-09:20-10:10@2d Graphics@johan@LA136@A3@
-09:20-10:10@2d Graphics@johan@LA136@A3@
-09:20-10:10@2d Graphics@joli@LA136@A3@
-10:10-11:00@OOSD@hans@LD112@A1@
-10:10-11:00@OOSD@hans@LD112@A1@
-10:10-11:00@OOSD@hans@LD112@A1@
-10:10-11:00@OOSD@hans@LD112@A1@
-10:10-11:00@OOSD@hans@LD112@A1@
-10:10-11:00@OOSD@joli@LD112@A1@
-11:15-12:05@2d Graphics@hans@OC106@A2@
-11:15-12:05@2d Graphics@hans@OC106@A2@
-11:15-12:05@2d Graphics@hans@OC106@A2@
-11:15-12:05@2d Graphics@hans@OC106@A2@
-11:15-12:05@2d Graphics@hans@OC106@A2@
-11:15-12:05@2d Graphics@hans@OC106@A2@
-11:15-12:05@2d Graphics@hans@OC106@A2@
+OOSD@2d Graphics@IPJ@ISDJ@Wiskunde 3@P&OC@
+Hans@Johan@Joli@Sanne@Pieter@Dylan@
+LS001@RS002@LB003@RS004@LS005@RS006@
+A1@A2@A3@B1@B2@B3@
+08:30-09:20@OOSD@Hans@LS001@A1@
+09:20-10:10@2d Graphics@Johan@RS002@A2@
+10:10-11:00@IPJ@Joli@LB003@A3@
+11:15-12:05@ISDJ@Sanne@RS004@B1@
+12:05-12:55@Wiskunde 3@Pieter@LS005@B2@
+13:30-14:20@P&OC@Dylan@RS006@B3@

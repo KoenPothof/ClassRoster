@@ -1,7 +1,36 @@
-.button:hover {
-    -fx-background-color: linear-gradient(#a4a4a4, #a6a6a6);
-}
-.combo-box  {
-    -fx-background-color: linear-gradient(#a4a4a4, #919191);
+.button {
+  -fx-background-color: #e6a96c;
+  -fx-text-fill: black;
+  -fx-border-radius: 2px;
+  -fx-cursor: hand;
 }
 
+.button:hover {
+  -fx-background-color: #e6916c;
+}
+
+.combo-box .arrow-button {
+  -fx-background-color: #e6a96c;
+}
+
+.combo-box.list-cell:hover{
+-fx-background-color: #e6a96c;
+}
+
+.tab {
+  -fx-background-color: #e6a96c;
+  -fx-text-fill: white;
+  /*-fx-border-color: #000000;*/
+  }
+
+.tab:hover {
+  -fx-background-color: #e6916c;
+  -fx-text-fill: white;
+  /*-fx-border-color: #000000;*/
+  }
+
+.tab:selected {
+  -fx-background-color: #e6916c;
+  -fx-text-fill: white;
+  /*-fx-border-color: #000000;*/
+  }
