@@ -2,35 +2,23 @@ package map;
 
 import Utilities.JsonReader;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import org.jfree.fx.FXGraphics2D;
 
 import javax.imageio.ImageIO;
-import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 
 
 public class Map {
     private Utilities.JsonReader jsonReader;
-    private boolean wall;
     private int tileWidth;
     private int tileHeight;
     private int mapWidth;
@@ -38,7 +26,7 @@ public class Map {
     private ArrayList<BufferedImage> slicedTiles = new ArrayList<>();
     private BufferedImage screenshot;
 
-    public Map(String fileName) throws IOException {
+    public Map() throws IOException {
 
         this.jsonReader = new JsonReader();
         JsonArray layerArray = this.jsonReader.getLayerArray();
@@ -92,8 +80,8 @@ public class Map {
             }
         }
 
-         layer = layerArray.getJsonObject(3);
-         data = new int[layer.getJsonArray("data").size()];
+        layer = layerArray.getJsonObject(3);
+        data = new int[layer.getJsonArray("data").size()];
         for (int j = 0; j < data.length; j++) {
             data[j] = layer.getJsonArray("data").getInt(j);
         }
@@ -119,15 +107,7 @@ public class Map {
     }
 
     public void draw(FXGraphics2D g2d) {
-    g2d.drawImage(screenshot, 0, 0, null);
-    }
-
-    public int getWidth() {
-        return this.mapWidth;
-    }
-
-    public int getHeight() {
-        return this.mapHeight;
+        g2d.drawImage(screenshot, 0, 0, null);
     }
 
     public BufferedImage getSlicedImage(int tileId) {

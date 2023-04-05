@@ -30,7 +30,7 @@ public class GuiCanvas {
     private final long timerTime = 1000; // 1000 = 1 second
 
     public GuiCanvas(BorderPane borderPanePane, FileConverter fileConverter) throws IOException {
-        map = new Map("map/project.json");
+        map = new Map();
         canvas = new ResizableCanvas(g -> draw(g), borderPanePane);
         FXGraphics2D g2d = new FXGraphics2D(canvas.getGraphicsContext2D());
 

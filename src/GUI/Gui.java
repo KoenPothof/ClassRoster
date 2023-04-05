@@ -431,21 +431,21 @@ public class Gui extends Application {
             boolean hasDuplicates = false;
             String currentTime = beta[0];
             for (int i = 0; i < fileConverter.getLessons().size(); i++) {
-                    if (fileConverter.getLessons().get(i).getTime().toString().equals(currentTime)) {
-                        if (fileConverter.getLessons().get(i).getGroup().toString().equals(beta[4])) {
-                            hasDuplicates = true;
-                            break;
-                        } else if (fileConverter.getLessons().get(i).getClassroom().toString().equals(beta[3])) {
-                            hasDuplicates = true;
-                            break;
-                        } else if (fileConverter.getLessons().get(i).getTeacher().toString().equals(beta[2])) {
-                            hasDuplicates = true;
-                            break;
-                        } else if (fileConverter.getLessons().get(i).getSubject().toString().equals(beta[1])) {
-                            hasDuplicates = true;
-                            break;
-                        }
+                if (fileConverter.getLessons().get(i).getTime().toString().equals(currentTime)) {
+                    if (fileConverter.getLessons().get(i).getGroup().toString().equals(beta[4])) {
+                        hasDuplicates = true;
+                        break;
+                    } else if (fileConverter.getLessons().get(i).getClassroom().toString().equals(beta[3])) {
+                        hasDuplicates = true;
+                        break;
+                    } else if (fileConverter.getLessons().get(i).getTeacher().toString().equals(beta[2])) {
+                        hasDuplicates = true;
+                        break;
+                    } else if (fileConverter.getLessons().get(i).getSubject().toString().equals(beta[1])) {
+                        hasDuplicates = true;
+                        break;
                     }
+                }
 
             }
             if (hasDuplicates) {

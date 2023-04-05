@@ -52,7 +52,7 @@ public class WalkingDirectionController {
 
     public void update() {
         teller++;
-        if (teller % 10 == 0){
+        if (teller % 10 == 0) {
             teller2++;
             teller3++;
             if (teller3 > 3)

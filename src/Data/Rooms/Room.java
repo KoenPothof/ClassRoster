@@ -22,12 +22,12 @@ public class Room {
 
         switch (roomType) {
             case CLASSROOM:
-                teacherPathfinding = new Pathfinding(x , y , WalkingDirections.DOWN);
+                teacherPathfinding = new Pathfinding(x, y, WalkingDirections.DOWN);
                 pathfindings = new Pathfinding[this.width * this.height];
                 for (int i = 0; i < this.height / 2; i++) {
                     pathfindings[i * 4] = new Pathfinding(x, y + i * 2 + 1, WalkingDirections.UP);
                     pathfindings[(i * 4) + 1] = new Pathfinding(x + 2, y + i * 2 + 1, WalkingDirections.UP);
-                    pathfindings[(i * 4) + 2] = new Pathfinding(x + 6, y + i * 2 + 1 , WalkingDirections.UP);
+                    pathfindings[(i * 4) + 2] = new Pathfinding(x + 6, y + i * 2 + 1, WalkingDirections.UP);
                     pathfindings[(i * 4) + 3] = new Pathfinding(x + 8, y + i * 2 + 1, WalkingDirections.UP);
                 }
                 break;

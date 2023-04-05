@@ -4,14 +4,11 @@ import NPC.WalkingDirections;
 import Utilities.JsonReader;
 import org.jfree.fx.FXGraphics2D;
 
-import javax.json.Json;
 import javax.json.JsonObject;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -50,7 +47,7 @@ public class Pathfinding {
             int alpha[] = getNextTile(x, y);
             int[][] neighbours = currentTile.getNeighbours(alpha);
             for (int i = 0; i < neighbours.length; i++) {
-                  if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
+                if (data[neighbours[i][0]][neighbours[i][1]] == 0) {
                     pathfindingTiles[neighbours[i][0]][neighbours[i][1]] = new PathfindingTile(neighbours[i][0], neighbours[i][1], x, y, data[x][y] + 1);
                     queue.add(pathfindingTiles[neighbours[i][0]][neighbours[i][1]]);
                     data[neighbours[i][0]][neighbours[i][1]] = data[x][y] + 1;
@@ -59,9 +56,6 @@ public class Pathfinding {
         }
         this.walkingDirection = walkingDirection;
     }
-
-
-
 
     public void dataCheck(int[][] data) {
         for (int y = 0; y < data[0].length; y++) {
@@ -80,7 +74,6 @@ public class Pathfinding {
     }
 
     public void draw(FXGraphics2D g2d) {
-
         for (int i = 0; i < pathfindingTiles.length; i++) {
             for (int j = 0; j < pathfindingTiles[i].length; j++) {
                 if (pathfindingTiles[i][j] != null) {
@@ -113,10 +106,6 @@ public class Pathfinding {
                 }
             }
         }
-    }
-
-    public PathfindingTile[][] getPathfindingTiles() {
-        return pathfindingTiles;
     }
 
     public int[] getNextTile(int x, int y) {
